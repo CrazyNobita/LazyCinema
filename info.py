@@ -66,7 +66,7 @@ STAR_PREMIUM_PLANS = {
     9: "7day",
     29: "1month",    
     149: "6month", 
-    199: "1Year",
+    249: "1Year",
     999: "Lifetime",
 }  # Premium plans with their respective durations in days
 

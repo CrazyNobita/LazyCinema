@@ -1,7 +1,7 @@
 <h1 align="center"><b>🚩 ᴊᴀɪ ꜱʜʀɪ ʀᴀᴍ 🚩</b></h1>
 
 <p align="center">
-  <img src="https://ibb.co/HD7PHqhJ" alt="Kakashi Logo">
+  <img src="https://i.ibb.co/fj2nSpZ/photo-2025-12-30-08-07-34-7589561001373073436.jpg" alt="Kakashi Logo">
 </p>
 
 <h1 align="center">𝓓𝓻𝓮𝓪𝓶𝔁𝓑𝓸𝓽𝔃</h1>

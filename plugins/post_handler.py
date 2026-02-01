@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 post_sessions = {}
 
 USE_GETFILE_BUTTON_BY_DEFAULT = True
-DEFAULT_WATERMARK = "Join [ᴅʀᴇᴀᴍxʙᴏᴛᴢ](https://t.me/dreamxbotz)"
+DEFAULT_WATERMARK = "Join [꧁𓆩𝕊𝕌ℙℝ𝔼𝕄𝔼 𝔹𝕆𝕋z𓆪꧂](https://t.me/SUPREME_BOTz)"
 LANGUAGES_FORMAT = "➥ <b>Languages :</b> <code>{langs}</code>"
 RESOLUTIONS_FORMAT = "\n➥ <b>Qualities :</b> <code>{resolutions}</code>"
 OTT_FORMAT = "\n➥ <b>Available on :</b> <code>{otts}</code>"

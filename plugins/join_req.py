@@ -1,4 +1,4 @@
-#Join Telegram Channel - @DREAMXBOTZ
+#Join Telegram Channel - @SUPREME_BOTz
 
 from pyrogram import Client, filters, enums
 from pyrogram.types import ChatJoinRequest

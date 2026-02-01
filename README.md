@@ -1,10 +1,10 @@
 <h1 align="center"><b>🚩 ᴊᴀɪ ꜱʜʀɪ ʀᴀᴍ 🚩</b></h1>
 
 <p align="center">
-  <img src="https://github.com/DreamXBotz/Pics/blob/main/dreamxbotz.jpg" alt="DreamxBotz Logo">
+  <img src="https://github.com/DreamXBotz/Pics/blob/main/dreamxbotz.jpg" alt="꧁𓆩𝕊𝕌ℙℝ𝔼𝕄𝔼 𝔹𝕆𝕋z𓆪꧂ Logo">
 </p>
 
-<h1 align="center">𝓓𝓻𝓮𝓪𝓶𝔁𝓑𝓸𝓽𝔃</h1>
+<h1 align="center">꧁𓆩𝕊𝕌ℙℝ𝔼𝕄𝔼 𝔹𝕆𝕋z𓆪꧂</h1>
 
 ---
 
@@ -92,7 +92,7 @@ Join our support group for assistance:
 - ✅ Auto Delete Old Files  
 - ✅ …and more!
 
-📌 *To stay updated with all new features, join our [Updates Channel](https://t.me/dreamxbotz).*
+📌 *To stay updated with all new features, join our [Updates Channel](https://t.me/SUPREME_BOTz).*
 
 ---
 

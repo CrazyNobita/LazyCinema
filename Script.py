@@ -229,7 +229,7 @@ Nᴀᴍᴇ : {}
 
 Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
     
-    CAPTION = """<b><a href="https://t.me/RivoBots">{file_name}</a></b>\n\n<b>⚜️ Powered By : <a href="https://t.me/RivoBots">[Rivo Bots]</a></b>"""
+    CAPTION = """<b><a href="https://t.me/RivoBots">{file_name}</a></b>\n\n<b>⚜️ Powered By : <a href="https://t.me/RivoBots">[ Rivo Bots ]</a></b>"""
 
     
     MOVIE_UPDATE_NOTIFY_TXT = """
@@ -402,7 +402,6 @@ sʜᴏᴡɴ ɪɴ : {remaining_seconds} <i>sᴇᴄ</i>⚡️
 ‼️ ᴍᴜsᴛ sᴇɴᴅ sᴄʀᴇᴇɴsʜᴏᴛ ᴀғᴛᴇʀ ᴘᴀʏᴍᴇɴᴛ.</b>"""
 
     SOURCE_TXT ="""<b>𝗦𝗢𝗨𝗥𝗖𝗘 𝗖𝗢𝗗𝗘 : 👇 </b>
-
 \n ꜱᴏᴜʀᴄᴇ ᴄᴏᴅᴇ ʜᴇʀᴇ ◉› :<a href=https://t.me/RivoBots>𝓡𝓲𝓿𝓸𝓑𝓸𝓽𝓼</a>\n """
 
     SETTING_TXT = """    

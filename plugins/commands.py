@@ -33,8 +33,7 @@ async def start(client, message):
             try:
                 await message.react(emoji=random.choice(REACTIONS), big=True)
             except Exception:
-                await message.react(emoji="⚡️")
-                pass
+                await message.react(emoji="⚡️", big=True)
         m = message
         if len(m.command) == 2 and m.command[1].startswith(('notcopy', 'sendall')):
             _, userid, verify_id, file_id = m.command[1].split("_", 3)
@@ -76,7 +75,6 @@ async def start(client, message):
                 reply_markup=reply_markup,
                 parse_mode=enums.ParseMode.HTML
             )
-            await sticker.delete()
             await asyncio.sleep(300)
             await dlt.delete()
             return         

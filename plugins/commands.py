@@ -115,23 +115,13 @@ async def start(client, message):
                         InlineKeyboardButton('ᴜᴘɢʀᴀᴅᴇ 🎟', callback_data="premium_info"),
                     ]]
             reply_markup = InlineKeyboardMarkup(buttons)
-            current_time = datetime.now(pytz.timezone(TIMEZONE))
-            curr_time = current_time.hour        
-            if curr_time < 12:
-                gtxt = "ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ 🌞" 
-            elif curr_time < 17:
-                gtxt = "ɢᴏᴏᴅ ᴀғᴛᴇʀɴᴏᴏɴ 🌓" 
-            elif curr_time < 21:
-                gtxt = "ɢᴏᴏᴅ ᴇᴠᴇɴɪɴɢ 🌘"
-            else:
-                gtxt = "ɢᴏᴏᴅ ɴɪɢʜᴛ 🌑"
             try:      
                 PIC = f"{random.choice(PICS_URL)}?r={get_random_mix_id()}"
             except Exception:
                 PIC = random.choice(PICS)
             await message.reply_photo(
                 photo=PIC,
-                caption=script.START_TXT.format(message.from_user.mention, gtxt, temp.U_NAME, temp.B_NAME),
+                caption=script.START_TXT.format(message.from_user.mention, temp.U_NAME, temp.B_NAME),
                 reply_markup=reply_markup,
                 parse_mode=enums.ParseMode.HTML
             )
@@ -148,23 +138,13 @@ async def start(client, message):
                         InlineKeyboardButton('ᴜᴘɢʀᴀᴅᴇ 🎟', callback_data="premium_info"),
                     ]]
             reply_markup = InlineKeyboardMarkup(buttons)
-            current_time = datetime.now(pytz.timezone(TIMEZONE))
-            curr_time = current_time.hour        
-            if curr_time < 12:
-                gtxt = "ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ 🌞" 
-            elif curr_time < 17:
-                gtxt = "ɢᴏᴏᴅ ᴀғᴛᴇʀɴᴏᴏɴ 🌓" 
-            elif curr_time < 21:
-                gtxt = "ɢᴏᴏᴅ ᴇᴠᴇɴɪɴɢ 🌘"
-            else:
-                gtxt = "ɢᴏᴏᴅ ɴɪɢʜᴛ 🌑"
             try:
                 PIC = f"{random.choice(PICS_URL)}?r={get_random_mix_id()}"
             except Exception:
                 PIC = random.choice(PICS)
             await message.reply_photo(
                 photo=PIC,
-                caption=script.START_TXT.format(message.from_user.mention, gtxt, temp.U_NAME, temp.B_NAME),
+                caption=script.START_TXT.format(message.from_user.mention, temp.U_NAME, temp.B_NAME),
                 reply_markup=reply_markup,
                 parse_mode=enums.ParseMode.HTML
             )

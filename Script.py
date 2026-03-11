@@ -164,7 +164,7 @@ Nᴀᴍᴇ - {}
 
 📝 ꜱᴇʀɪᴇꜱ ʀᴇǫᴜᴇꜱᴛ ꜰᴏʀᴍᴀᴛ 👇
 
-⚜️ ᴇxᴀᴍᴘʟᴇ : Loki S01 or Loki S01E04 or Lucifer S03E24
+⚜️ ᴇxᴀᴍᴘʟᴇ : Big Boss S06 or Big Boss S06E04 or Lucifer S03E24
 
 🚯 ᴅᴏɴᴛ ᴜꜱᴇ ➠ ':(!,./)</b>"""
     

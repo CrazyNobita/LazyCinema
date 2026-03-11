@@ -428,35 +428,44 @@ async def start(client, message):
         settings = await get_settings(int(grp_id))            
         DREAMX_CAPTION = settings.get('caption', CUSTOM_FILE_CAPTION)
         if DREAMX_CAPTION:
-            try:
-                f_caption=DREAMX_CAPTION.format(file_name= '' if title is None else title, file_size='' if size is None else size, file_caption='' if f_caption is None else f_caption)
-            except Exception as e:
-                logger.exception(e)
-                f_caption = f_caption
-
-        if f_caption is None:
-            f_caption = clean_filename(files.file_name)
-        btn = await stream_buttons(message.from_user.id, file_id)
-        msg = await client.send_cached_media(
-            chat_id=message.from_user.id,
-            file_id=file_id,
-            cover=cover,
-            caption=f_caption,
-            protect_content=settings.get('file_secure', PROTECT_CONTENT),
-            reply_markup=InlineKeyboardMarkup(btn)
-        )
-        
-        k = await msg.reply(script.DEL_MSG.format(get_time(DELETE_TIME)),
-            quote=True, parse_mode=enums.ParseMode.HTML
-        )
     try:
-        await asyncio.sleep(DELETE_TIME)
-        await msg.delete()
-        await k.edit_text("<b>ʏᴏᴜʀ ᴠɪᴅᴇᴏ / ꜰɪʟᴇ ɪꜱ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ !!</b>")
-        return
+        f_caption = DREAMX_CAPTION.format(
+            file_name='' if title is None else title,
+            file_size='' if size is None else size,
+            file_caption='' if f_caption is None else f_caption
+        )
     except Exception as e:
-        logger.exception(f"Error In /start command - {e}")
-        pass          
+        logger.exception(e)
+        f_caption = f_caption
+
+if f_caption is None:
+    f_caption = clean_filename(files.file_name)
+
+btn = await stream_buttons(message.from_user.id, file_id)
+
+msg = await client.send_cached_media(
+    chat_id=message.from_user.id,
+    file_id=file_id,
+    cover=cover,
+    caption=f_caption,
+    protect_content=settings.get('file_secure', PROTECT_CONTENT),
+    reply_markup=InlineKeyboardMarkup(btn)
+)
+
+k = await msg.reply(
+    script.DEL_MSG.format(get_time(DELETE_TIME)),
+    quote=True,
+    parse_mode=enums.ParseMode.HTML
+)
+
+try:
+    await asyncio.sleep(DELETE_TIME)
+    await msg.delete()
+    await k.edit_text("<b>ʏᴏᴜʀ ᴠɪᴅᴇᴏ / ꜰɪʟᴇ ɪꜱ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ !!</b>")
+    return
+except Exception as e:
+    logger.exception(f"Error In /start command - {e}")
+    pass
 async def stream_buttons(user_id: int, file_id: str):
     if STREAM_MODE and not PREMIUM_STREAM_MODE:
         return [

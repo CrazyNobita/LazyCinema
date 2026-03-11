@@ -29,9 +29,6 @@ BATCH_FILES = {}
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
-    try:
-        await message.reply_text("⌛")
-            logger.exception("reply_sticker failed: %s", e)
         if EMOJI_MODE:
             try:
                 await message.react(emoji=random.choice(REACTIONS), big=True)

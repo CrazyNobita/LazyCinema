@@ -37,7 +37,7 @@ async def start(client, message):
         except Exception:
             await message.react(emoji="⚡️", big=True)
     m = message
-  if len(m.command) == 2 and m.command[1].startswith(('notcopy', 'sendall')):
+    if len(m.command) == 2 and m.command[1].startswith(('notcopy', 'sendall')):
             _, userid, verify_id, file_id = m.command[1].split("_", 3)
             user_id = int(userid)
             grp_id = temp.VERIFICATIONS.get(user_id, 0)

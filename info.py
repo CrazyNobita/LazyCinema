@@ -33,7 +33,7 @@ COVERX = bool(environ.get('COVERX', True)) # Use cover image for indexed files (
 # If you disable it then bot will use a default thumb for all files
 
 
-PICS = (environ.get('PICS', 'https://i.ibb.co/KcDWH8Wc/x.jpg')).split()  # Sample pic
+PICS = (environ.get('PICS', 'https://i.ibb.co/rRJSHmw1/x.jpg')).split()  # Sample pic
 NOR_IMG = environ.get("NOR_IMG", "https://graph.org/file/e20b5fdaf217252964202.jpg")
 MELCOW_PHOTO = environ.get("MELCOW_PHOTO", "https://graph.org/file/56b5deb73f3b132e2bb73.jpg")
 SPELL_IMG = environ.get("SPELL_IMG", "https://graph.org/file/13702ae26fb05df52667c.jpg")

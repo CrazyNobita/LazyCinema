@@ -1,11 +1,11 @@
 import os
-import re
+import re, sys
+import json
 import base64
 import logging
 import random
 import asyncio
 import string
-import sys
 import pytz
 from .pmfilter import auto_filter 
 from Script import script
@@ -14,12 +14,14 @@ from database.refer import referdb
 from database.config_db import mdb
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, ReplyKeyboardMarkup
 from pyrogram import Client, filters, enums
-from pyrogram.errors import FloodWait, ChatAdminRequired, UserNotParticipant , ChannelInvalid, PeerIdInvalid
-from database.ia_filterdb import Media, Media2, get_file_details, unpack_new_file_id, get_bad_files, save_file
+from pyrogram.errors import FloodWait, ChatAdminRequired, UserNotParticipant
+from database.ia_filterdb import Media, Media2, get_file_details, unpack_new_file_id, get_bad_files
 from database.users_chats_db import db
 from info import *
-from utils import get_settings, save_group_settings, is_subscribed, is_req_subscribed, get_size, get_shortlink, is_check_admin, temp, get_readable_time, get_time, generate_settings_text, log_error, clean_filename, get_random_mix_id
+from utils import get_settings, save_group_settings, is_subscribed, is_req_subscribed, get_size, get_shortlink, is_check_admin, temp, get_readable_time, get_time, generate_settings_text, log_error, clean_filename
 import time
+
+
 
 logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
@@ -29,13 +31,12 @@ BATCH_FILES = {}
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
-        if EMOJI_MODE:
-            try:
-                await message.react(emoji=random.choice(REACTIONS), big=True)
-            except Exception:
-                await message.react(emoji="⚡️")
-                pass
-        m = message
+    if EMOJI_MODE:
+        try:
+            await message.react(emoji=random.choice(REACTIONS), big=True)
+        except Exception:
+            await message.react(emoji="⚡️", big=True)
+    m = message
         if len(m.command) == 2 and m.command[1].startswith(('notcopy', 'sendall')):
             _, userid, verify_id, file_id = m.command[1].split("_", 3)
             user_id = int(userid)

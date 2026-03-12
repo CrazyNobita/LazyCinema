@@ -446,7 +446,8 @@ async def start(client, message):
             protect_content=settings.get('file_secure', PROTECT_CONTENT),
             reply_markup=InlineKeyboardMarkup(btn)
         )
-        
+
+    try:
         k = await msg.reply(script.DEL_MSG.format(get_time(DELETE_TIME)),
             quote=True, parse_mode=enums.ParseMode.HTML
         )
@@ -456,7 +457,6 @@ async def start(client, message):
         return
     except Exception as e:
         logger.exception(f"Error In /start command - {e}")
-        pass
     
 async def stream_buttons(user_id: int, file_id: str):
     if STREAM_MODE and not PREMIUM_STREAM_MODE:

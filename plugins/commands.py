@@ -457,14 +457,7 @@ async def start(client, message):
     except Exception as e:
         logger.exception(f"Error In /start command - {e}")
         pass
-    finally:
-        if sticker:
-            try:
-                await sticker.delete()
-            except Exception as e:
-                logger.exception(f"Error In Deleting Sticker - {e}")
-                pass
-
+    
 async def stream_buttons(user_id: int, file_id: str):
     if STREAM_MODE and not PREMIUM_STREAM_MODE:
         return [

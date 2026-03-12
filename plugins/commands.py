@@ -30,11 +30,13 @@ BATCH_FILES = {}
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
     try:
-        stick_id = "CAACAgUAAxkBAAEQJmJpViid_0yscWKPfh3RMCY8pIkmXwACMAcAAqzbsFexyKU6FPQAAjgE"
-        try:
-            sticker = await message.reply_sticker(sticker=stick_id)
-        except Exception as e:
-            logger.exception("reply_sticker failed: %s", e)
+        import asyncio
+
+msg = await message.reply_text("👀")
+await asyncio.sleep(1)
+await msg.edit_text("⚡")
+await asyncio.sleep(1)
+await msg.edit_text("🦋")
         if EMOJI_MODE:
             try:
                 await message.react(emoji=random.choice(REACTIONS), big=True)

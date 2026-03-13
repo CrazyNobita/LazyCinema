@@ -118,7 +118,7 @@ async def start(client, message):
             gtxt = "ɢᴏᴏᴅ ᴇᴠᴇɴɪɴɢ 🌘"
         else:
             gtxt = "ɢᴏᴏᴅ ɴɪɢʜᴛ 🌑"
-        m=await message.reply_text("👀")
+        msg = await message.reply_text("👀")
         await asyncio.sleep(1)
         await msg.edit_text("⚡")
         await asyncio.sleep(1)
@@ -153,7 +153,7 @@ async def start(client, message):
             gtxt = "ɢᴏᴏᴅ ᴇᴠᴇɴɪɴɢ 🌘"
         else:
             gtxt = "ɢᴏᴏᴅ ɴɪɢʜᴛ 🌑"
-        m=await message.reply_text("👀")
+        msg = await message.reply_text("👀")
         await asyncio.sleep(1)
         await msg.edit_text("⚡")
         await asyncio.sleep(1)

@@ -9,14 +9,19 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from motor.motor_asyncio import AsyncIOMotorClient
 from utils import temp
 
-# ====================================================================
-# 🔥 TMDB API KEY
-TMDB_API_KEY = "7dc544d9253bccc3cfecc1c677f69819"
-# ⏳ কত সেকেন্ড অপেক্ষা করবে? (ডিফল্ট ১০ সেকেন্ড)
-BATCH_TIME = 10 
-# ====================================================================
+# ========================================
 
-# --- 1. কনফিগারেশন এবং ইগনোর লিস্ট ---
+# 🔥 TMDB API KEY
+
+TMDB_API_KEY = "7dc544d9253bccc3cfecc1c677f69819"
+
+# ⏳ How many seconds to wait? (Default 10 seconds)
+
+BATCH_TIME = 10 
+
+# ========================================
+
+# --- 1. Configuration and Ignore List ---
 
 IGNORE_WORDS = {
     "rarbg", "dub", "sub", "sample", "mkv", "aac", "combined",
@@ -63,7 +68,8 @@ SINGLE_REGEX = re.compile(r'\bS(\d{1,2})[^\w\n\r]*E(?:p(?:isode)?)?0*(\d{1,3})',
 NAMED_REGEX = re.compile(r'Season\s*0*(\d{1,2})[\s\-,:]*Ep(?:isode)?\s*0*(\d{1,3})', re.IGNORECASE)
 EP_ONLY_RANGE = re.compile(r'\b(?:EP|Episode)0*(\d{1,3})\s*-\s*0*(\d{1,3})\b',re.IGNORECASE)
 
-# --- 2. ডাটাবেস হ্যান্ডলার ---
+# --- 2. Database Handler ---
+
 class MovieUpdateDB:
     def __init__(self, uri, database_name):
         self._client = AsyncIOMotorClient(uri)
@@ -93,7 +99,7 @@ PENDING_QUEUE = {}
 MEDIA_FILTER = filters.document | filters.video | filters.audio
 DEFAULT_IMAGE_URL = "https://te.legra.ph/file/88d845b4f8a024a71465d.jpg"
 
-# --- 3. হেল্পার ফাংশন ---
+# --- 3. Helper function ---
 
 def clean_mentions_links(text: str) -> str:
     return CLEAN_PATTERN.sub("", text or "").strip()
@@ -175,6 +181,7 @@ def extract_media_info(filename: str, caption: str):
     }
 
 # --- 4. TMDB Fetcher ---
+
 async def fetch_tmdb(query, year):
     try:
         url = f"https://api.themoviedb.org/3/search/multi?api_key={TMDB_API_KEY}&query={query}"
@@ -222,12 +229,13 @@ async def fetch_tmdb(query, year):
         return None
 
 # --- 🔥 FIX: SAFE SORT KEY ---
+
 def get_ep_sort_key(ep):
     try:
         return int(ep)
     except:
         try:
-            # যদি "1-8" হয় তবে প্রথম সংখ্যাটি (1) রিটার্ন করবে
+            # If "1-8" then return the first number (1)
             return int(str(ep).split('-')[0])
         except:
             return 0
@@ -250,13 +258,13 @@ def generate_caption(data, files_list):
     epi_text = ""
     if seasons:
         for s in sorted(seasons.keys()):
-            # এখানে ক্র্যাশ হচ্ছিল, তাই কাস্টম sort key ব্যবহার করা হয়েছে
+            # It was crashing here, so a custom sort key was used
             eps_list = list(set(seasons[s]))
             eps_list.sort(key=get_ep_sort_key)
             
             ep_display = []
             
-            # সিঙ্গেল এপিসোড এবং রেঞ্জ আলাদা করা
+            # Separating single episodes and ranges
             singles = []
             ranges = []
             
@@ -266,7 +274,7 @@ def generate_caption(data, files_list):
                 except:
                     ranges.append(str(ep))
             
-            # সিঙ্গেল এপিসোডগুলো স্মার্টলি গ্রুপ করা (1,2,3 -> 1-3)
+            # Smartly group single episodes (1,2,3 -> 1-3)
             if singles:
                 singles.sort()
                 start = singles[0]
@@ -281,13 +289,13 @@ def generate_caption(data, files_list):
                 if start == end: ep_display.append(str(start))
                 else: ep_display.append(f"{start}-{end}")
             
-            # রেঞ্জগুলো (যেমন "1-8") যোগ করে দেওয়া
+            # Adding ranges (like "1-8")
             ep_display.extend(ranges)
             
             epi_text += f"\n┠ 📺 <b>Season {s}:</b> Ep {', '.join(ep_display)}"
 
     caption = f"""
-<b>⚡️ ℕ𝔼𝕎 ℙℝ𝔼𝕄𝕀𝕌𝕄 𝔸ℝℝ𝕀𝕍𝔼𝔻 ⚡️</b>
+<b>🔥 Just Uploaded ✅ Stream Fast!</b>
 
 ┏━━━━━━━━━━━━━━━━━━━┫
 ┃🎬 <b>Title:</b> {data['title']}
@@ -304,11 +312,12 @@ def generate_caption(data, files_list):
 <b>📖 Plot Summary:</b>
 ❝ <i>{data['plot'][:250]}...</i> ❞
 
-<b>🚀 Pᴏᴡᴇʀᴇᴅ Bʏ @TGLinkBase</b>
+<b>🚀 Pᴏᴡᴇʀᴇᴅ Bʏ @RivoBots</b>
 """
     return caption
 
-# --- 5. ব্যাকগ্রাউন্ড প্রসেসর ---
+# --- 5. Background Processor ---
+
 async def batch_processor(bot, unique_id, clean_name, year):
     await asyncio.sleep(BATCH_TIME)
     

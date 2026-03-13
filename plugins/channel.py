@@ -312,7 +312,7 @@ def generate_caption(data, files_list):
 <b>📖 Plot Summary:</b>
 ❝ <i>{data['plot'][:250]}...</i> ❞
 
-🔍 <b>Sᴇᴀʀᴄʜ → @RIVO_AUTOFILTER_BOT</b>
+<b>🚀 Pᴏᴡᴇʀᴇᴅ Bʏ @RivoBots</b>
 """
     return caption
 

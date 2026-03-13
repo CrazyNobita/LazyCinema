@@ -2001,6 +2001,8 @@ async def auto_filter(client, msg, spoll=False):
 async def ai_spell_check(chat_id, wrong_name):
     async def search_movie(wrong_name):
         search_results = imdb.search_movie(wrong_name)
+        if not search_results or not hasattr(search_results, "titles"):
+            return []
         movie_list = [movie.title for movie in search_results.titles]
         return movie_list
     movie_list = await search_movie(wrong_name)

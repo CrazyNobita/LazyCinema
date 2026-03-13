@@ -119,7 +119,10 @@ async def start(client, message):
         else:
             gtxt = "ɢᴏᴏᴅ ɴɪɢʜᴛ 🌑"
         m=await message.reply_text("👀")
-        await asyncio.sleep(0.4)
+        await asyncio.sleep(1)
+        await msg.edit_text("⚡")
+        await asyncio.sleep(1)
+        await msg.edit_text("🦋")
         await m.delete()        
         await message.reply_photo(
             photo=random.choice(PICS),
@@ -151,7 +154,10 @@ async def start(client, message):
         else:
             gtxt = "ɢᴏᴏᴅ ɴɪɢʜᴛ 🌑"
         m=await message.reply_text("👀")
-        await asyncio.sleep(0.4)
+        await asyncio.sleep(1)
+        await msg.edit_text("⚡")
+        await asyncio.sleep(1)
+        await msg.edit_text("🦋")
         await m.delete()        
         await message.reply_photo(
             photo=random.choice(PICS),

@@ -10,7 +10,7 @@
 
 ## 👤 Owner
 
-[![Contact Developer](https://img.shields.io/static/v1?label=Contact+Developer&message=On+Telegram&color=critical)](https://t.me/Deendayal_Support_Group)
+[![Contact Developer](https://img.shields.io/static/v1?label=Contact+Developer&message=On+Telegram&color=critical)](https://t.me/Movie_Lord_Support)
 
 ---
 
@@ -41,7 +41,7 @@ Try the live bot here:
 - 🌴 [⌯ ᴢɪsʜᴀɴ | ×͜× |](https://t.me/IM_JISSHU)
 - 🌴 [⌯ ʙʜᴀʀᴀᴛʜ | ×͜× |](https://t.me/Bharath_boy)
 - 🌴 [Harshal Purohit Edits](https://github.com/HarshalPurohitEdits)
-- 🌴 [Support Group](https://t.me/Deendayal_Support_Group)
+- 🌴 [Support Group](https://t.me/Movie_Lord_Support)
 
 ---
 
@@ -49,7 +49,7 @@ Try the live bot here:
 
 Join our support group for assistance:
 
-[![Join Support Group](https://img.shields.io/badge/Join%20Support%20Group-Click%20Here-blue?style=flat&logo=telegram&labelColor=white)](https://t.me/Deendayal_Support_Group)
+[![Join Support Group](https://img.shields.io/badge/Join%20Support%20Group-Click%20Here-blue?style=flat&logo=telegram&labelColor=white)](https://t.me/Movie_Lord_Support)
 
 ---
 

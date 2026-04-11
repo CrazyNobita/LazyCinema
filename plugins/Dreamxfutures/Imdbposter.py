@@ -76,8 +76,6 @@ def list_to_str(lst):
     return ""
 
 
-# --- TMDB Direct API Helpers (replaces external worker URL) ---
-
 def _list_to_str_tmdb(data_list, limit=10, key=None):
     """Helper for formatting TMDB response lists to comma-separated strings."""
     if not data_list or not isinstance(data_list, list):
@@ -113,7 +111,7 @@ async def _tmdb_get(path, params=None, api_key=None):
         }
 
     session = await get_session()
-    async with session.get(url, params=_params, headers=_headers) as resp:
+    async with session.get(url, params=_params, headers=_headers, ssl=False) as resp:
         resp.raise_for_status()
         return await resp.json()
 
@@ -127,9 +125,29 @@ async def _fetch_media_details(media_type: str, media_id: int, api_key=None):
 async def _search_media_id(query: str, api_key=None):
     """Search TMDB for the best matching movie/TV show and return (media_type, media_id)."""
     title, year = _extract_title_and_year(query)
-    params = {'query': title, 'language': 'en-US', 'page': 1, 'include_adult': False}
-    result = await _tmdb_get('search/multi', params=params, api_key=api_key)
-    multi_results = result.get('results', [])
+    
+    multi_results = []
+    words = title.split()
+    
+    # Generate up to 3 fallback queries to minimize API rate limit usage
+    queries_to_try = [title]
+    if len(words) > 2:
+        queries_to_try.append(" ".join(words[:-1]))  # Drop the last word
+        queries_to_try.append(words[0])              # Keep just the first word
+    elif len(words) == 2:
+        queries_to_try.append(words[0])
+        
+    # Remove any duplicates but preserve order, capping at 3 attempts
+    queries_to_try = list(dict.fromkeys(queries_to_try))[:3]
+    
+    for target_query in queries_to_try:
+        if not target_query:
+            continue
+        params = {'query': target_query, 'language': 'en-US', 'page': 1, 'include_adult': 'false'}
+        result = await _tmdb_get('search/multi', params=params, api_key=api_key)
+        multi_results = result.get('results', [])
+        if multi_results:
+            break
 
     def get_ratio(s1, s2):
         if not s1 or not s2:
@@ -138,16 +156,16 @@ async def _search_media_id(query: str, api_key=None):
 
     scored_results = []
     for r in multi_results:
+        # Score the string matched against the ORIGINAL title, not the shortened target_query
         ratio = get_ratio(r.get('title') or r.get('name'), title)
-        if ratio >= 0.85:
+        if ratio >= 0.5:   # Lowered from 0.6 to 0.5 to allow for dropped/modified words
             scored_results.append((r, ratio))
 
     if not scored_results:
-        scored_results = [(r, get_ratio(r.get('title') or r.get('name'), title)) for r in multi_results]
+        scored_results = [(r, get_ratio(r.get('title') or r.get('name'), title)) for r in multi_results[:10]]
 
     today = datetime.utcnow().date()
     candidates_past, candidates_upcoming = [], []
-
     for r, ratio in scored_results:
         mtype = r.get('media_type')
         rd_str = r.get('release_date') or r.get('first_air_date')
@@ -157,13 +175,15 @@ async def _search_media_id(query: str, api_key=None):
             rd_date = datetime.strptime(rd_str, '%Y-%m-%d').date()
         except ValueError:
             continue
-        if year and rd_date.year != year:
-            continue
+        if year:
+            if abs(rd_date.year - year) > 1:
+                continue
         if mtype == 'movie':
             try:
                 details = await _fetch_media_details(mtype, r['id'], api_key=api_key)
                 runtime = details.get('runtime')
                 is_video = details.get('video', False)
+
                 if is_video or (runtime and runtime < MIN_RUNTIME):
                     continue
             except Exception:
@@ -265,8 +285,6 @@ async def _fetch_tmdb_data(query: str, api_key=None):
     return output_data
 
 
-# --- Main Movie Details Functions ---
-
 async def get_movie_details(query, bulk=False, id=False, file=None):
     if not id:
         from utils import listx_to_str, imdb
@@ -358,6 +376,7 @@ async def get_movie_details(query, bulk=False, id=False, file=None):
         'year': movie.year,
         'genres': listx_to_str(movie.genres),
         'poster': movie.cover_url,
+        'poster_url': movie.cover_url.split("._V1_")[0] + "._V1_SX1280.jpg" if movie.cover_url and "._V1_" in movie.cover_url else movie.cover_url,
         'plot': plot,
         'rating': str(movie.rating),
         "url": movie.url or f"https://www.imdb.com/title/{imdb_id}"

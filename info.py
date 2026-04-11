@@ -52,7 +52,7 @@ PREMIUM_LOGS = int(environ.get('PREMIUM_LOGS', '-1003174376872'))  # Premium log
 DELETE_CHANNELS = [int(dch) if id_pattern.search(dch) else dch for dch in environ.get('DELETE_CHANNELS', '-1003722185571').split()] #(make sure bot is admin)
 support_chat_id = environ.get('SUPPORT_CHAT_ID', '-1002803456095')  # Support group id (make sure bot is admin)
 reqst_channel = environ.get('REQST_CHANNEL_ID', '-1002857234849')  # Request channel id (make sure bot is admin)
-SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'https://t.me/+9J8z5nxAKG80MzJl')  # Support group link (make sure bot is admin)
+SUPPORT_CHAT = 'https://t.me/Movie_Lord_Support'  # Support group link (make sure bot is admin)
 
 # FORCE_SUB 
 auth_req_channels = environ.get("AUTH_REQ_CHANNELS", "-1002857234849")# requst to join Channel for force sub (make sure bot is admin) only for bot ADMINS  
@@ -61,8 +61,8 @@ auth_channels     = environ.get("AUTH_CHANNELS", "-1002949178653")# Channels for
 # ============================
 # Payment Configuration
 # ============================
-QR_CODE = environ.get('QR_CODE', 'https://vault.pictures/p/c87e5d4b4c614240988f527f5fa9abf1')    # QR code image for payments
-OWNER_UPI_ID = environ.get('OWNER_UPI_ID', 'lokesh.your.papa@fam')    # Owner UPI ID for payments
+QR_CODE = 'https://vault.pictures/p/c87e5d4b4c614240988f527f5fa9abf1'    # QR code image for payments
+OWNER_UPI_ID = 'lokesh.your.papa@fam'    # Owner UPI ID for payments
 
 STAR_PREMIUM_PLANS = {
     10: "7day",
@@ -122,7 +122,7 @@ THREE_VERIFY_GAP = int(environ.get('THREE_VERIFY_GAP', "54000"))
 # ============================
 # Channel & Group Links Configuration
 # ============================
-GRP_LNK = environ.get('GRP_LNK', 'https://t.me/+XCfPmMluP1w5MTQ9') # Group link for the bot
+GRP_LNK = 'https://t.me/Movie_Lord_Support' # Group link for the bot
 OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/G0D_EMPEROR_BOT') # Owner link for the bot
 UPDATE_CHNL_LNK = environ.get('UPDATE_CHNL_LNK', 'https://t.me/SUPREME_BOTz') # Update channel link for the bot
 

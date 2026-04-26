@@ -229,7 +229,7 @@ Nᴀᴍᴇ : {}
 
 Mᴇꜱꜱᴀɢᴇ : <b>{}</b>"""
     
-    CAPTION = """<b><a href="https://t.me/SUPREME_BOTz">{file_name}</a></b>\n\n<b>⚜️ Powered By : <a href="https://t.me/SUPREME_BOTz">[ ꧁𓆩𝕊𝕌ℙℝ𝔼𝕄𝔼 𝔹𝕆𝕋z𓆪꧂ ]</a></b>"""
+    CAPTION = """<b><a href="https://t.me/+1HqE2T4y_UhlZWVl">{file_name}</a></b>\n\n<b>⚜️ Powered By : <a href="https://t.me/+1HqE2T4y_UhlZWVl">[ ꧁𓆩𝙈𝙊𝙑𝙄𝙀 𝙇𝙊𝙍𝘿 𝙋𝙍𝙀𝙈𝙄𝙐𝙈𓆪꧂ ]</a></b>"""
 
     
     MOVIE_UPDATE_NOTIFY_TXT = """

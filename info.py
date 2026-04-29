@@ -102,7 +102,7 @@ LOG_VR_CHANNEL = int(environ.get('LOG_VR_CHANNEL', '-1003288278602')) #Verificat
 LOG_API_CHANNEL = int(environ.get('LOG_API_CHANNEL', '-1003288278602')) #If Anyone Set Your Bot In Any Group And Set Shortner In That Group Then In This Channel The All Details Come
 VERIFY_IMG = environ.get("VERIFY_IMG", "https://telegra.ph/file/9ecc5d6e4df5b83424896.jpg")
 
-TUTORIAL = environ.get("TUTORIAL", "https://t.me/SUPREME_BOTz")   # Tutorial link for verification
+TUTORIAL = environ.get("TUTORIAL", "https://t.me/+wUHB7rzWtDdjZTI1")   # Tutorial link for verification
 TUTORIAL_2 = environ.get("TUTORIAL_2", "https://t.me/SUPREME_BOTz")   # Second tutorial link for verification
 TUTORIAL_3 = environ.get("TUTORIAL_3", "https://t.me/SUPREME_BOTz")   # Third tutorial link for verification
 

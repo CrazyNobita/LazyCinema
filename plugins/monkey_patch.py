@@ -11,6 +11,7 @@ from pyrogram.errors import FilePartMissing
 from pyrogram.file_id import FileType
 
 from pyrogram import enums, types, Client
+from database.users_chats_db import db
 
 logging.basicConfig(
     level=logging.INFO,
@@ -21,6 +22,54 @@ pyro_log = logging.getLogger("pyrogram")
 pyro_log.setLevel(logging.WARNING)
 
 log = logging.getLogger(__name__)
+
+# Store original methods before they are patched
+_orig_send_document = Client.send_document
+_orig_send_audio = Client.send_audio
+_orig_send_animation = Client.send_animation
+
+async def get_bot_thumb(client, thumb):
+    if thumb is None:
+        try:
+            thumb_id = await db.get_bot_thumbnail(client.me.id)
+            if thumb_id:
+                return await client.download_media(thumb_id)
+        except Exception as e:
+            log.error(f"Error getting bot thumbnail: {e}")
+    return None
+
+async def custom_send_document(self, chat_id, document, thumb=None, *args, **kwargs):
+    thumb_path = await get_bot_thumb(self, thumb)
+    if thumb_path:
+        thumb = thumb_path
+    try:
+        return await _orig_send_document(self, chat_id, document, thumb=thumb, *args, **kwargs)
+    finally:
+        if thumb_path and os.path.exists(thumb_path):
+            try: os.remove(thumb_path)
+            except: pass
+
+async def custom_send_audio(self, chat_id, audio, thumb=None, *args, **kwargs):
+    thumb_path = await get_bot_thumb(self, thumb)
+    if thumb_path:
+        thumb = thumb_path
+    try:
+        return await _orig_send_audio(self, chat_id, audio, thumb=thumb, *args, **kwargs)
+    finally:
+        if thumb_path and os.path.exists(thumb_path):
+            try: os.remove(thumb_path)
+            except: pass
+
+async def custom_send_animation(self, chat_id, animation, thumb=None, *args, **kwargs):
+    thumb_path = await get_bot_thumb(self, thumb)
+    if thumb_path:
+        thumb = thumb_path
+    try:
+        return await _orig_send_animation(self, chat_id, animation, thumb=thumb, *args, **kwargs)
+    finally:
+        if thumb_path and os.path.exists(thumb_path):
+            try: os.remove(thumb_path)
+            except: pass
 
 async def custom_send_cached_media(
         self: "Client",
@@ -50,11 +99,18 @@ async def custom_send_cached_media(
             "types.ForceReply"
         ] = None
     ) -> Optional["types.Message"]:
-        
+
         vidcover_file = None
         vidcover_media = None
+
+        if cover is None:
+            try:
+                cover = await db.get_bot_thumbnail(self.me.id)
+            except:
+                pass
+
         peer = await self.resolve_peer(chat_id)
-        
+
         reply_to = await utils.get_reply_to(
             client=self,
             chat_id=chat_id,
@@ -67,7 +123,7 @@ async def custom_send_cached_media(
             quote_entities=quote_entities,
             parse_mode=parse_mode
         )
-        
+
         try:
             if cover is not None:
                 if isinstance(cover, str):
@@ -186,10 +242,23 @@ async def custom_send_video(
         progress: Callable = None,
         progress_args: tuple = ()
     ) -> Optional["types.Message"]:
-    
+
         file = None
         vidcover_file = None
         vidcover_media = None
+        thumb_path = None
+
+        if thumb is None:
+            thumb_path = await get_bot_thumb(self, thumb)
+            if thumb_path:
+                thumb = thumb_path
+
+        if cover is None:
+            try:
+                cover = await db.get_bot_thumbnail(self.me.id)
+            except:
+                pass
+
         peer = await self.resolve_peer(chat_id)
 
         reply_to = await utils.get_reply_to(
@@ -243,7 +312,7 @@ async def custom_send_video(
                         access_hash=vidcover_media.photo.access_hash,
                         file_reference=vidcover_media.photo.file_reference
                     )
-            
+
             if isinstance(video, str):
                 if os.path.isfile(video):
                     thumb = await self.save_file(thumb)
@@ -346,6 +415,10 @@ async def custom_send_video(
                             )
         except StopTransmission:
             return None
+        finally:
+            if thumb_path and os.path.exists(thumb_path):
+                try: os.remove(thumb_path)
+                except: pass
 
 
 async def custom_copy(
@@ -605,6 +678,9 @@ async def custom_copy_message(
 
 Client.send_cached_media = custom_send_cached_media
 Client.send_video = custom_send_video
+Client.send_document = custom_send_document
+Client.send_audio = custom_send_audio
+Client.send_animation = custom_send_animation
 types.Message.copy = custom_copy
 Client.copy_message = custom_copy_message
 

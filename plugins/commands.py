@@ -1451,6 +1451,31 @@ async def remove_fsub(client, message):
         print(f"[ERROR] remove_fsub: {e}")
         await message.reply_text(f"⚠️ ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ: {e}")
 
+@Client.on_message(filters.command('view_thumb'))
+async def view_thumb(client, message):
+    bot_id = client.me.id
+    thumb = await db.get_bot_thumbnail(bot_id)
+    if thumb:
+        await message.reply_photo(photo=thumb, caption="<b>ᴛʜɪꜱ ɪꜱ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ɢʟᴏʙᴀʟ ᴛʜᴜᴍʙɴᴀɪʟ 🖼️</b>")
+    else:
+        await message.reply_text("<b>ɴᴏ ɢʟᴏʙᴀʟ ᴛʜᴜᴍʙɴᴀɪʟ ꜰᴏᴜɴᴅ ❌</b>")
+
+@Client.on_message(filters.command('set_thumb') & filters.user(ADMINS))
+async def set_thumb(client, message):
+    bot_id = client.me.id
+    if not message.reply_to_message or not message.reply_to_message.photo:
+        return await message.reply_text("<b>ᴘʟᴇᴀꜱᴇ ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴘʜᴏᴛᴏ ᴛᴏ ꜱᴇᴛ ɪᴛ ᴀꜱ ᴛʜᴇ ɢʟᴏʙᴀʟ ᴛʜᴜᴍʙɴᴀɪʟ 🖼️</b>")
+
+    thumb_id = message.reply_to_message.photo.file_id
+    await db.set_bot_thumbnail(bot_id, thumb_id)
+    await message.reply_text("<b>ɢʟᴏʙᴀʟ ᴛʜᴜᴍʙɴᴀɪʟ ꜱᴇᴛ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ✅</b>")
+
+@Client.on_message(filters.command('del_thumb') & filters.user(ADMINS))
+async def del_thumb(client, message):
+    bot_id = client.me.id
+    await db.set_bot_thumbnail(bot_id, None)
+    await message.reply_text("<b>ɢʟᴏʙᴀʟ ᴛʜᴜᴍʙɴᴀɪʟ ᴅᴇʟᴇᴛᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ✅</b>")
+
 @Client.on_message(filters.command('clean_groups') & filters.user(ADMINS))
 async def clean_groups_handler(client, message):
     msg = await message.reply('Cleaning groups... This may take a while.', quote=True)

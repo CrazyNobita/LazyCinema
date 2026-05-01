@@ -7,7 +7,8 @@ import asyncio
 import string
 import sys
 import pytz
-from .pmfilter import auto_filter 
+from .pmfilter import auto_filter
+from .monkey_patch import clear_thumb_cache
 from Script import script
 from datetime import datetime
 from database.refer import referdb
@@ -1468,12 +1469,14 @@ async def set_thumb(client, message):
 
     thumb_id = message.reply_to_message.photo.file_id
     await db.set_bot_thumbnail(bot_id, thumb_id)
+    clear_thumb_cache()
     await message.reply_text("<b>ɢʟᴏʙᴀʟ ᴛʜᴜᴍʙɴᴀɪʟ ꜱᴇᴛ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ✅</b>")
 
 @Client.on_message(filters.command('del_thumb') & filters.user(ADMINS))
 async def del_thumb(client, message):
     bot_id = client.me.id
     await db.set_bot_thumbnail(bot_id, None)
+    clear_thumb_cache()
     await message.reply_text("<b>ɢʟᴏʙᴀʟ ᴛʜᴜᴍʙɴᴀɪʟ ᴅᴇʟᴇᴛᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ✅</b>")
 
 @Client.on_message(filters.command('clean_groups') & filters.user(ADMINS))

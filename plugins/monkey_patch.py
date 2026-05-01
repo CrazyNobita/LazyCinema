@@ -23,53 +23,30 @@ pyro_log.setLevel(logging.WARNING)
 
 log = logging.getLogger(__name__)
 
-# Store original methods before they are patched
-_orig_send_document = Client.send_document
-_orig_send_audio = Client.send_audio
-_orig_send_animation = Client.send_animation
+# Cache for the global bot thumbnail path
+GLOBAL_THUMB = None
 
-async def get_bot_thumb(client, thumb):
-    if thumb is None:
-        try:
-            thumb_id = await db.get_bot_thumbnail(client.me.id)
-            if thumb_id:
-                return await client.download_media(thumb_id)
-        except Exception as e:
-            log.error(f"Error getting bot thumbnail: {e}")
+async def get_bot_thumb(client):
+    global GLOBAL_THUMB
+    if GLOBAL_THUMB and os.path.exists(GLOBAL_THUMB):
+        return GLOBAL_THUMB
+    try:
+        thumb_id = await db.get_bot_thumbnail(client.me.id)
+        if thumb_id:
+            GLOBAL_THUMB = await client.download_media(thumb_id)
+            return GLOBAL_THUMB
+    except Exception as e:
+        log.error(f"Error getting bot thumbnail: {e}")
     return None
 
-async def custom_send_document(self, chat_id, document, thumb=None, *args, **kwargs):
-    thumb_path = await get_bot_thumb(self, thumb)
-    if thumb_path:
-        thumb = thumb_path
-    try:
-        return await _orig_send_document(self, chat_id, document, thumb=thumb, *args, **kwargs)
-    finally:
-        if thumb_path and os.path.exists(thumb_path):
-            try: os.remove(thumb_path)
-            except: pass
-
-async def custom_send_audio(self, chat_id, audio, thumb=None, *args, **kwargs):
-    thumb_path = await get_bot_thumb(self, thumb)
-    if thumb_path:
-        thumb = thumb_path
-    try:
-        return await _orig_send_audio(self, chat_id, audio, thumb=thumb, *args, **kwargs)
-    finally:
-        if thumb_path and os.path.exists(thumb_path):
-            try: os.remove(thumb_path)
-            except: pass
-
-async def custom_send_animation(self, chat_id, animation, thumb=None, *args, **kwargs):
-    thumb_path = await get_bot_thumb(self, thumb)
-    if thumb_path:
-        thumb = thumb_path
-    try:
-        return await _orig_send_animation(self, chat_id, animation, thumb=thumb, *args, **kwargs)
-    finally:
-        if thumb_path and os.path.exists(thumb_path):
-            try: os.remove(thumb_path)
-            except: pass
+def clear_thumb_cache():
+    global GLOBAL_THUMB
+    if GLOBAL_THUMB and os.path.exists(GLOBAL_THUMB):
+        try:
+            os.remove(GLOBAL_THUMB)
+        except Exception as e:
+            log.error(f"Error deleting cached thumb: {e}")
+    GLOBAL_THUMB = None
 
 async def custom_send_cached_media(
         self: "Client",
@@ -104,10 +81,7 @@ async def custom_send_cached_media(
         vidcover_media = None
 
         if cover is None:
-            try:
-                cover = await db.get_bot_thumbnail(self.me.id)
-            except:
-                pass
+            cover = await get_bot_thumb(self)
 
         peer = await self.resolve_peer(chat_id)
 
@@ -246,20 +220,10 @@ async def custom_send_video(
         file = None
         vidcover_file = None
         vidcover_media = None
-        thumb_path = None
+        peer = await self.resolve_peer(chat_id)
 
         if thumb is None:
-            thumb_path = await get_bot_thumb(self, thumb)
-            if thumb_path:
-                thumb = thumb_path
-
-        if cover is None:
-            try:
-                cover = await db.get_bot_thumbnail(self.me.id)
-            except:
-                pass
-
-        peer = await self.resolve_peer(chat_id)
+            thumb = await get_bot_thumb(self)
 
         reply_to = await utils.get_reply_to(
             client=self,
@@ -415,10 +379,6 @@ async def custom_send_video(
                             )
         except StopTransmission:
             return None
-        finally:
-            if thumb_path and os.path.exists(thumb_path):
-                try: os.remove(thumb_path)
-                except: pass
 
 
 async def custom_copy(
@@ -674,13 +634,17 @@ async def custom_copy_message(
         reply_markup=reply_markup
     )
 
+# Patch Client methods
+_orig_send_document = Client.send_document
 
+async def custom_send_document(self, chat_id, document, thumb=None, *args, **kwargs):
+    if thumb is None:
+        thumb = await get_bot_thumb(self)
+    return await _orig_send_document(self, chat_id, document, thumb=thumb, *args, **kwargs)
 
 Client.send_cached_media = custom_send_cached_media
 Client.send_video = custom_send_video
 Client.send_document = custom_send_document
-Client.send_audio = custom_send_audio
-Client.send_animation = custom_send_animation
 types.Message.copy = custom_copy
 Client.copy_message = custom_copy_message
 

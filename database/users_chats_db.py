@@ -387,6 +387,12 @@ class Database:
             upsert=True
         )
 
+    async def get_bot_thumbnail(self, bot_id):
+        return await self.get_bot_setting(bot_id, 'bot_thumb', None)
+
+    async def set_bot_thumbnail(self, bot_id, file_id):
+        return await self.update_bot_setting(bot_id, 'bot_thumb', file_id)
+
     async def connect_group(self, group_id, user_id):
         user= await self.connection.find_one({'_id': user_id})
         if user:

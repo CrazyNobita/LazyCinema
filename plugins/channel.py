@@ -325,7 +325,7 @@ async def _process_with_lock(bot, filename, caption, media_info, base_name, proc
             "genres": genres,
             "rating": details.get("rating", "N/A"),
             "imdb_url": details.get("url", "")if not TMDB_POSTER or error_tmdb else details.get("tmdb_url"),
-            "year": media_info["year"] or details.get("year"),
+            "year": details.get("year") or media_info["year"],
             "tag": media_info["tag"],
             "ott_platform": media_info["ott_platform"],
             "message_id": None,
@@ -535,17 +535,28 @@ def generate_movie_message(movie_doc, base_name):
     quality_str = ", ".join(sorted(all_qualities)) if all_qualities else "N/A"
     language_str = ", ".join(sorted(all_languages)) if all_languages else "N/A"
     ott_str = ", ".join(sorted(all_ott_platforms)) if all_ott_platforms else "N/A"
+    rating=movie_doc.get("rating", "-")
+    try:
+        r = float(rating)
+    except (TypeError, ValueError):
+        r = 0.0
 
+    rating_text = "-" if r == 0.0 else str(rating)
+    year_val = str(movie_doc.get("year") or "")
+    filename_display = base_name
+    if year_val and filename_display.strip().endswith(year_val):
+        filename_display = filename_display.strip()[:-len(year_val)].strip()
     return script.MOVIE_UPDATE_NOTIFY_TXT.format(
         poster_url=movie_doc.get("poster_url", ""),
         imdb_url=movie_doc.get("imdb_url", ""),
-        filename=base_name,
+        filename=filename_display,
         tag=primary_tag,
+        year=year_val,
         genres=genres,
         ott=ott_str,
         quality=quality_str,
         language=language_str,
         episodes=epi_block,
-        rating=movie_doc.get("rating", "N/A"),
+        rating=rating_text,
         search_link=temp.B_LINK
-    )
+)

@@ -13,7 +13,7 @@ from datetime import datetime
 from database.refer import referdb
 from database.config_db import mdb
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, ReplyKeyboardMarkup
-from pyrogram import Client, filters, enums
+from pyrogram import Client, filters, enums, StopPropagation
 from pyrogram.errors import FloodWait, ChatAdminRequired, UserNotParticipant , ChannelInvalid, PeerIdInvalid
 from database.ia_filterdb import Media, Media2, get_file_details, unpack_new_file_id, get_bad_files, save_file
 from database.users_chats_db import db
@@ -29,6 +29,7 @@ BATCH_FILES = {}
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
+    sticker = None
     try:
         stick_id = "CAACAgUAAxkBAAEQJmJpViid_0yscWKPfh3RMCY8pIkmXwACMAcAAqzbsFexyKU6FPQAAjgE"
         try:
@@ -49,7 +50,7 @@ async def start(client, message):
             settings = await get_settings(grp_id)         
             verify_id_info = await db.get_verify_id_info(user_id, verify_id)
             if not verify_id_info or verify_id_info["verified"]:
-                return await message.reply("<b>ʟɪɴᴋ ᴇxᴘɪʀᴇᴅ ᴛʀʏ ᴀɢᴀɪɴ...</b>")  
+                return await message.reply(script.LINK_EXPIRED_TXT)  
 
             ist_timezone = pytz.timezone('Asia/Kolkata')
             if await db.user_verified(user_id):
@@ -173,16 +174,16 @@ async def start(client, message):
             try:
                 user_id = int(message.command[1].split("_")[1])
             except ValueError:
-                await message.reply_text("Invalid refer!")
+                await message.reply_text("<b>‼️ ɪɴᴠᴀʟɪᴅ ʀᴇꜰᴇʀ!</b>")
                 return
             if user_id == message.from_user.id:
-                await message.reply_text("Hᴇʏ Dᴜᴅᴇ, Yᴏᴜ Cᴀɴ'ᴛ Rᴇғᴇʀ Yᴏᴜʀsᴇʟғ 🤣!\n\nsʜᴀʀᴇ ʟɪɴᴋ ʏᴏᴜʀ ғʀɪᴇɴᴅ ᴀɴᴅ ɢᴇᴛ 10 ʀᴇғᴇʀʀᴀʟ ᴘᴏɪɴᴛ ɪғ ʏᴏᴜ ᴀʀᴇ ᴄᴏʟʟᴇᴄᴛɪɴɢ 100 ʀᴇғᴇʀʀᴀʟ ᴘᴏɪɴᴛs ᴛʜᴇɴ ʏᴏᴜ ᴄᴀɴ ɢᴇᴛ 1 ᴍᴏɴᴛʜ ғʀᴇᴇ ᴘʀᴇᴍɪᴜᴍ ᴍᴇᴍʙᴇʀsʜɪᴘ.")
+                await message.reply_text(script.REFER_SELF_ALRT)
                 return
             if referdb.is_user_in_list(message.from_user.id):
-                await message.reply_text("Yᴏᴜ ʜᴀᴠᴇ ʙᴇᴇɴ ᴀʟʀᴇᴀᴅʏ ɪɴᴠɪᴛᴇᴅ ❗")
+                await message.reply_text(script.REFER_ALREADY_ALRT)
                 return
             if await db.is_user_exist(message.from_user.id): 
-                await message.reply_text("‼️ Yᴏᴜ Hᴀᴠᴇ Bᴇᴇɴ Aʟʀᴇᴀᴅʏ Iɴᴠɪᴛᴇᴅ ᴏʀ Jᴏɪɴᴇᴅ")
+                await message.reply_text(script.REFER_ALREADY_JOINED_ALRT)
                 return 
             try:
                 uss = await client.get_users(user_id)
@@ -192,8 +193,8 @@ async def start(client, message):
             fromuse = referdb.get_refer_points(user_id) + 10
             if fromuse == 100:
                 referdb.add_refer_points(user_id, 0) 
-                await message.reply_text(f"🎉 𝗖𝗼𝗻𝗴𝗿𝗮𝘁𝘂𝗹𝗮𝘁𝗶𝗼𝗻𝘀! 𝗬𝗼𝘂 𝘄𝗼𝗻 𝟭𝟬 𝗥𝗲𝗳𝗲𝗿𝗿𝗮𝗹 𝗽𝗼𝗶𝗻𝘁 𝗯𝗲𝗰𝗮𝘂𝘀𝗲 𝗬𝗼𝘂 𝗵𝗮𝘃𝗲 𝗯𝗲𝗲𝗻 𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗜𝗻𝘃𝗶𝘁𝗲𝗱 ☞ {uss.mention}!")		    
-                await message.reply_text(user_id, f"You have been successfully invited by {message.from_user.mention}!") 	
+                await message.reply_text(script.REFER_CONGRATS_ALRT.format(uss.mention))		    
+                await message.reply_text(user_id, script.REFER_INVITED_ALRT.format(message.from_user.mention)) 	
                 seconds = 2592000
                 if seconds > 0:
                     expiry_time = datetime.datetime.now() + datetime.timedelta(seconds=seconds)
@@ -207,8 +208,8 @@ async def start(client, message):
                     await client.send_message(chat_id=admin, text=f"Sᴜᴄᴄᴇss ғᴜʟʟʏ ᴛᴀsᴋ ᴄᴏᴍᴘʟᴇᴛᴇᴅ ʙʏ ᴛʜɪs ᴜsᴇʀ:\n\nuser Nᴀᴍᴇ: {uss.mention}\n\nUsᴇʀ ɪᴅ: {uss.id}!")	
             else:
                 referdb.add_refer_points(user_id, fromuse)
-                await message.reply_text(f"You have been successfully invited by {uss.mention}!")
-                await client.send_message(user_id, f"𝗖𝗼𝗻𝗴𝗿𝗮𝘁𝘂𝗹𝗮𝘁𝗶𝗼𝗻𝘀! 𝗬𝗼𝘂 𝘄𝗼𝗻 𝟭𝟬 𝗥𝗲𝗳𝗲𝗿𝗿𝗮𝗹 𝗽𝗼𝗶𝗻𝘁 𝗯𝗲𝗰𝗮𝘂𝘀𝗲 𝗬𝗼𝘂 𝗵𝗮𝘃𝗲 𝗯𝗲𝗲𝗻 𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗜𝗻𝘃𝗶𝘁𝗲𝗱 ☞{message.from_user.mention}!")
+                await message.reply_text(script.REFER_INVITED_ALRT.format(uss.mention))
+                await client.send_message(user_id, script.REFER_CONGRATS_ALRT.format(message.from_user.mention))
             return
 
         if len(message.command) == 2 and message.command[1] in ["premium"]:
@@ -230,8 +231,8 @@ async def start(client, message):
             movies = message.command[1].split("-", 1)[1] 
             movie = movies.replace('-',' ')
             message.text = movie 
-            await auto_filter(client, message) 
-            return
+            await auto_filter(client, message)
+            raise StopPropagation
 
         data = message.command[1]
         try:
@@ -263,11 +264,7 @@ async def start(client, message):
                         ])
                         reply_markup = InlineKeyboardMarkup(btn)
                     photo = random.choice(FSUB_PICS) if FSUB_PICS else "https://graph.org/file/7478ff3eac37f4329c3d8.jpg"
-                    caption = (
-                        f"👋 ʜᴇʟʟᴏ {message.from_user.mention}\n\n"
-                        "🛑 ʏᴏᴜ ᴍᴜsᴛ ᴊᴏɪɴ ᴛʜᴇ ʀᴇǫᴜɪʀᴇᴅ ᴄʜᴀɴɴᴇʟs ᴛᴏ ᴄᴏɴᴛɪɴᴜᴇ.\n"
-                        "👉 ᴊᴏɪɴ ᴀʟʟ ᴛʜᴇ ʙᴇʟᴏᴡ ᴄʜᴀɴɴᴇʟs ᴀɴᴅ ᴛʀʏ ᴀɢᴀɪɴ."
-                    )
+                    caption = script.FORCESUB_TXT.format(message.from_user.mention)
                     await message.reply_photo(
                         photo=photo,
                         caption=caption,
@@ -462,6 +459,8 @@ async def start(client, message):
         await msg.delete()
         await k.edit_text("<b>ʏᴏᴜʀ ᴠɪᴅᴇᴏ / ꜰɪʟᴇ ɪꜱ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ !!</b>")
         return
+    except StopPropagation:
+        raise
     except Exception as e:
         logger.exception(f"Error In /start command - {e}")
         pass

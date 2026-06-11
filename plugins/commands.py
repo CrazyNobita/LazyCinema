@@ -14,7 +14,7 @@ from database.refer import referdb
 from database.config_db import mdb
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, ReplyKeyboardMarkup
 from pyrogram import Client, filters, enums, StopPropagation
-from pyrogram.errors import FloodWait, ChatAdminRequired, UserNotParticipant , ChannelInvalid, PeerIdInvalid
+from pyrogram.errors import FloodWait, UserNotParticipant , ChannelInvalid, PeerIdInvalid
 from database.ia_filterdb import Media, Media2, get_file_details, unpack_new_file_id, get_bad_files, save_file
 from database.users_chats_db import db
 from info import *

@@ -82,10 +82,13 @@ async def extract_data_handler(client: Client, query: CallbackQuery):
             await query.message.reply_text("❌ File not found in DB.", quote=True)
             return
 
-        log_msg = await client.send_cached_media(
-            chat_id=BIN_CHANNEL,
-            file_id=file_id
-        )
+        if query.message and query.message.media:
+            log_msg = query.message
+        else:
+            log_msg = await client.send_cached_media(
+                chat_id=BIN_CHANNEL,
+                file_id=file_id
+            )
 
         file_name = get_name(log_msg)
         safe_title = (

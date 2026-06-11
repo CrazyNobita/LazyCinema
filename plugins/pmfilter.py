@@ -6,7 +6,7 @@ from urllib.parse import quote_plus
 import logging
 from database.ia_filterdb import Media, Media2, get_file_details, get_search_results, get_bad_files
 from database.config_db import mdb
-from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid, ChatAdminRequired, UserNotParticipant
+from pyrogram.errors import MessageIdInvalid, UserIsBlocked, MessageNotModified, PeerIdInvalid
 from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto, WebAppInfo
 from info import *
@@ -57,6 +57,12 @@ async def give_filter(client, message):
                     return await message.delete()
                 await auto_filter(client, message)
         except KeyError:
+            await save_group_settings(message.chat.id, 'auto_ffilter', True)
+            settings = await get_settings(message.chat.id)
+            if settings['auto_ffilter']:
+                await auto_filter(client, message) 
+        except Exception as e:
+            logger.exception("Error in auto filter: %s", e)
             pass
     else:
         search = message.text
@@ -129,6 +135,10 @@ async def refercall(bot, query):
 
 @Client.on_callback_query(filters.regex(r"^next"))
 async def next_page(bot, query):
+    try:
+        await query.answer()
+    except Exception:
+        pass
     ident, req, key, offset = query.data.split("_")
     curr_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     if int(req) not in [query.from_user.id, 0]:
@@ -312,30 +322,26 @@ async def next_page(bot, query):
                 if query.message.caption:
                     try:
                         await query.message.edit_caption(caption=cap, reply_markup=InlineKeyboardMarkup(btn), parse_mode=enums.ParseMode.HTML)
-                    except MessageNotModified:
+                    except (MessageNotModified, MessageIdInvalid):
                         pass
                     except Exception as e:
                         logger.exception(e)
                 else:
                     try:
                         await query.message.edit_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-                    except MessageNotModified:
+                    except (MessageNotModified, MessageIdInvalid):
                         pass
             else:
                 cap = await get_cap(settings, remaining_seconds, files, query, total, dreamx_title, offset+1)
                 await query.message.edit_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
         except Exception as e:
             logger.exception("Failed to send result: %s", e)
-        # try:
-        #     await query.message.edit_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-        # except MessageNotModified:
-        #     pass
     else:
         try:
             await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
     await query.answer()
 
@@ -517,12 +523,12 @@ async def filter_qualities_cb_handler(client: Client, query: CallbackQuery):
         cap = await get_cap(settings, remaining_seconds, files, query, total_results, dreamx_title, offset=1)
         try:
             await query.message.edit_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
     else:
         try:
             await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
     await query.answer()
 
@@ -672,12 +678,12 @@ async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
         cap = await get_cap(settings, remaining_seconds, files, query, total_results, dreamx_title, offset=1)
         try:
             await query.message.edit_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True, parse_mode=enums.ParseMode.HTML)
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
     else:
         try:
             await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
     await query.answer()
 
@@ -815,12 +821,12 @@ async def filter_seasons_cb_handler(client: Client, query: CallbackQuery):
                 reply_markup=InlineKeyboardMarkup(btn),
                 disable_web_page_preview=True,
             )
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
     else:
         try:
             await query.edit_message_reply_markup(InlineKeyboardMarkup(btn))
-        except MessageNotModified:
+        except (MessageNotModified, MessageIdInvalid):
             pass
     await query.answer()
 
@@ -934,7 +940,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 btn.append([InlineKeyboardButton("♻️ ᴛʀʏ ᴀɢᴀɪɴ ♻️", callback_data=f"checksub#{kk}#{file_id}")])
                 try:
                     await query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(btn))
-                except MessageNotModified:
+                except (MessageNotModified, MessageIdInvalid):
                     pass
                 await query.answer(
                     f"👋 Hello {query.from_user.first_name},\n\n"

@@ -179,7 +179,7 @@ Nᴀᴍᴇ - {}
 
 <blockquote>😌 यह ᴍᴏᴠɪᴇ मुझे ᴍᴇʀᴇ ᴅᴀᴛᴀʙᴀꜱᴇ में नहीं मिली।</blockquote>"""
 
-    ALREADY_AVAILABLE_TXT = """<b>ʜᴇʏ {},
+  ALREADY_AVAILABLE_TXT = """<b>ʜᴇʏ {},
     
 ʏᴏᴜʀ ʀᴇǫᴜᴇꜱᴛ ɪꜱ ᴀʟʀᴇᴀᴅʏ ᴀᴠᴀɪʟᴀʙʟᴇ ✅
 

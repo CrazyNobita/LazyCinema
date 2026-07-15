@@ -200,8 +200,7 @@ async def get_search_results(chat_id, query, file_type=None, max_results=None, o
                 Media.find(filter_mongo).sort("$natural", -1).limit(fetch_limit).to_list(length=fetch_limit),
                 Media2.find(filter_mongo).sort("$natural", -1).limit(fetch_limit).to_list(length=fetch_limit),
             )
-            files = results[0]
-            files.extend(results[1])
+            files = results[1] + results[0]
             files = files[offset:offset + limit]
         else:
             files = await Media.find(filter_mongo).sort("$natural", -1).skip(offset).limit(limit).to_list(length=limit)
@@ -221,8 +220,7 @@ async def get_search_results(chat_id, query, file_type=None, max_results=None, o
                 )
             )
             total_results = sum(count_results)
-            files = find_results[0]
-            files.extend(find_results[1])
+            files = find_results[1] + find_results[0]
             files = files[offset:offset + max_results]
         else:
             total_results = await Media.count_documents(filter_mongo)
@@ -270,9 +268,10 @@ async def get_bad_files(query, file_type=None):
             .to_list(300)
         )
     results = await asyncio.gather(*tasks)
-    files = results[0]
     if MULTIPLE_DB and len(results) > 1:
-        files.extend(results[1])
+        files = results[1] + results[0]
+    else:
+        files = results[0]
     files = files[:300]
     return files, len(files)
 

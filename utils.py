@@ -6,15 +6,14 @@ import string
 from info import ULTRA_FAST_MODE, MAX_LIST_ELM, BAD_WORDS, LONG_IMDB_DESCRIPTION, IS_VERIFY, MAX_B_TN, TUTORIAL, TUTORIAL_2, TUTORIAL_3, LOG_CHANNEL, TMDB_ON_SEARCH
 from imdbkit import IMDBKit 
 import asyncio
-from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid, ChatAdminRequired, MessageNotModified
+from pyrogram.types import Message, InlineKeyboardButton
+from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid, ChatAdminRequired
 from pyrogram import enums
 from typing import Union
 from Script import script
 from typing import List
 from database.users_chats_db import db
 from bs4 import BeautifulSoup
-import requests
 import aiohttp
 from shortzy import Shortzy
 
@@ -159,7 +158,7 @@ async def users_broadcast(user_id, message, is_pin):
         await db.delete_user(int(user_id))
         logging.info(f"{user_id} - PeerIdInvalid")
         return False, "Error"
-    except Exception as e:
+    except Exception:
         return False, "Error"
 
 async def groups_broadcast(chat_id, message, is_pin):
@@ -174,7 +173,7 @@ async def groups_broadcast(chat_id, message, is_pin):
     except FloodWait as e:
         await asyncio.sleep(e.x)
         return await groups_broadcast(chat_id, message)
-    except Exception as e:
+    except Exception:
         await db.delete_chat(chat_id)
         return "Error"
 
@@ -211,7 +210,7 @@ async def clear_junk(user_id, message):
         await db.delete_user(int(user_id))
         logging.info(f"{user_id} - PeerIdInvalid")
         return False, "Error"
-    except Exception as e:
+    except Exception:
         return False, "Error"
      
 async def get_status(bot_id):
@@ -526,7 +525,7 @@ async def get_shortlink(link, grp_id, is_second_shortener=False, is_third_shorte
     shortzy = Shortzy(api, site)
     try:
         link = await shortzy.convert(link)
-    except Exception as e:
+    except Exception:
         link = await shortzy.get_quick_link(link)
     return link
 
@@ -565,9 +564,9 @@ def get_size(size):
         size /= 1024.0
     return "%.2f %s" % (size, units[i])
 
-def split_list(l, n):
-    for i in range(0, len(l), n):
-        yield l[i:i + n]  
+def split_list(lst, n):
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]  
 
 def extract_request_content(message_text):
     match = re.search(r"<u>(.*?)</u>", message_text)

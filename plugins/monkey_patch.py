@@ -10,7 +10,7 @@ from pyrogram import StopTransmission, enums, raw, types, utils
 from pyrogram.errors import FilePartMissing
 from pyrogram.file_id import FileType
 
-from pyrogram import enums, types, Client
+from pyrogram import Client
 
 logging.basicConfig(
     level=logging.INFO,
@@ -107,14 +107,14 @@ async def custom_send_cached_media(
                         access_hash=vidcover_media.photo.access_hash,
                         file_reference=vidcover_media.photo.file_reference
                     )
-        except Exception as e:
+        except Exception:
             pass
 
         media = utils.get_input_media_from_file_id(file_id)
         if vidcover_file is not None:
             try:
                 media.video_cover = vidcover_file
-            except Exception as e:
+            except Exception:
                 pass
         media.spoiler = has_spoiler
 
@@ -279,7 +279,7 @@ async def custom_send_video(
                     if vidcover_file is not None:
                         try:
                             media.video_cover = vidcover_file
-                        except Exception as e:
+                        except Exception:
                             pass
                     media.spoiler = has_spoiler
             else:

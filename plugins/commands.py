@@ -26,7 +26,6 @@ from info import (
     
 )
 from utils import get_settings, save_group_settings, is_subscribed, is_req_subscribed, get_size, get_shortlink, is_check_admin, temp, get_readable_time, get_time, generate_settings_text, log_error, clean_filename, get_random_mix_id
-import time
 
 logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
@@ -67,7 +66,7 @@ async def start(client, message):
             else:
                 key = "second_time_verified" if await db.is_user_verified(user_id) else "last_verified"
             current_time = datetime.now(tz=ist_timezone)
-            result = await db.update_notcopy_user(user_id, {key:current_time})
+            await db.update_notcopy_user(user_id, {key:current_time})
             await db.update_verify_id_info(user_id, verify_id, {"verified":True})
             if key == "third_time_verified": 
                 num = 3 
@@ -382,17 +381,13 @@ async def start(client, message):
                 logger.exception(e)
                 return
 
-        user = message.from_user.id
         settings = await get_settings(int(grp_id))
         if not files_:
             raw = base64.urlsafe_b64decode(data + "=" * (-len(data) % 4))
             sep = raw.find(b"_")
             if sep == -1:
                 raise ValueError("Invalid encoded data")
-            pre = raw[:sep].decode("ascii")
             file_id = raw[sep + 1:].decode("latin1")
-        # if not files_:
-        #     pre, file_id = ((base64.urlsafe_b64decode(data + "=" * (-len(data) % 4))).decode("utf-8")).split("_", 1)
             try:
                 cover = None
                 if COVERX:
@@ -640,7 +635,7 @@ async def delete_all_index(bot, message):
 async def settings(client, message):
     user_id = message.from_user.id if message.from_user else None
     if not user_id:
-        return await message.reply(f"ʏᴏᴜ'ʀᴇ ᴀɴᴏɴʏᴍᴏᴜꜱ ᴀᴅᴍɪɴ.")
+        return await message.reply("ʏᴏᴜ'ʀᴇ ᴀɴᴏɴʏᴍᴏᴜꜱ ᴀᴅᴍɪɴ.")
     chat_type = message.chat.type
     if chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         grp_id = message.chat.id
@@ -1198,7 +1193,6 @@ async def set_time(client, message):
     await save_group_settings(grp_id, 'verify_time', time)
     await message.reply_text(f"<b>✅️ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ꜱᴇᴛ 2ɴᴅ ᴠᴇʀɪꜰʏ ᴛɪᴍᴇ ꜰᴏʀ {title}\n\nᴛɪᴍᴇ - <code>{time}</code></b>")
     await client.send_message(LOG_API_CHANNEL, f"#Set_2nd_Verify_Time\n\nɢʀᴏᴜᴘ ɴᴀᴍᴇ : {title}\n\nɢʀᴏᴜᴘ ɪᴅ : {grp_id}\n\nɪɴᴠɪᴛᴇ ʟɪɴᴋ : {invite_link}\n\nᴜᴘᴅᴀᴛᴇᴅ ʙʏ : {message.from_user.username}")
-
 @Client.on_message(filters.command('set_time_2'))
 async def set_time_2(client, message):
     chat_type = message.chat.type
@@ -1289,7 +1283,6 @@ async def verify(bot, message):
             return await message.reply_text("ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ᴡᴏʀᴋs ᴏɴʟʏ ɪɴ ɢʀᴏᴜᴘs!")
         if chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
             grpid = message.chat.id
-            title = message.chat.title
             command_text = message.text.split(' ')[1] if len(message.text.split(' ')) > 1 else None
             if command_text == "off":
                 await save_group_settings(grpid, 'is_verify', False)

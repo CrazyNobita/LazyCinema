@@ -7,7 +7,7 @@ from database.ia_filterdb import Media, Media2, get_file_details, get_search_res
 from database.config_db import mdb
 from pyrogram.errors import MessageIdInvalid, UserIsBlocked, MessageNotModified, PeerIdInvalid
 from pyrogram import Client, filters, enums
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto, WebAppInfo
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto
 from info import (
     ADMINS, AUTH_CHANNELS, AUTH_REQ_CHANNELS, BIN_CHANNEL, CUSTOM_FILE_CAPTION, DELETE_TIME,
     EMOJI_MODE, GRP_LNK, LANDSCAPE_POSTER, LANGUAGES, LOG_CHANNEL, MAX_B_TN, MSG_ALRT,
@@ -128,7 +128,7 @@ async def refercall(bot, query):
             query.message.id,
             InputMediaPhoto("https://graph.org/file/1a2e64aee3d4d10edd930.jpg")
         )
-    except Exception as e:    
+    except Exception:    
         pass
     await query.message.edit_text(
         text=script.REFER_TXT.format(bot.me.username, query.from_user.id),
@@ -151,7 +151,7 @@ async def next_page(bot, query):
         offset = int(offset)
     except Exception:
         offset = 0
-    if BUTTONS.get(key) != None:
+    if BUTTONS.get(key) is not None:
         search = BUTTONS.get(key)
     else:
         search = FRESH.get(key)
@@ -180,7 +180,7 @@ async def next_page(bot, query):
         btn.insert(0,
                    [
                        InlineKeyboardButton(
-                           f'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
+                           'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
                        InlineKeyboardButton(
                            "Lᴀɴɢᴜᴀɢᴇ", callback_data=f"languages#{key}"),
                        InlineKeyboardButton(
@@ -202,7 +202,7 @@ async def next_page(bot, query):
         btn.insert(0,
                    [
                        InlineKeyboardButton(
-                           f'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
+                           'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
                        InlineKeyboardButton(
                            "Lᴀɴɢᴜᴀɢᴇ", callback_data=f"languages#{key}"),
                        InlineKeyboardButton(
@@ -456,7 +456,7 @@ async def filter_qualities_cb_handler(client: Client, query: CallbackQuery):
         btn.insert(0,
                    [
                        InlineKeyboardButton(
-                           f'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
+                           'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
                        InlineKeyboardButton(
                            "Lᴀɴɢᴜᴀɢᴇ", callback_data=f"languages#{key}"),
                        InlineKeyboardButton(
@@ -475,7 +475,7 @@ async def filter_qualities_cb_handler(client: Client, query: CallbackQuery):
         btn.insert(0,
                    [
                        InlineKeyboardButton(
-                           f'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
+                           'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
                        InlineKeyboardButton(
                            "Lᴀɴɢᴜᴀɢᴇ", callback_data=f"languages#{key}"),
                        InlineKeyboardButton(
@@ -615,7 +615,7 @@ async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
         btn.insert(0,
                    [
                        InlineKeyboardButton(
-                           f'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
+                           'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
                        InlineKeyboardButton(
                            "Lᴀɴɢᴜᴀɢᴇ", callback_data=f"languages#{key}"),
                        InlineKeyboardButton(
@@ -635,7 +635,7 @@ async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
         btn.insert(0,
                    [
                        InlineKeyboardButton(
-                           f'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
+                           'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
                        InlineKeyboardButton(
                            "Lᴀɴɢᴜᴀɢᴇ", callback_data=f"languages#{key}"),
                        InlineKeyboardButton(
@@ -703,7 +703,6 @@ async def seasons_cb_handler(client: Client, query: CallbackQuery):
     except Exception:
         pass
     _, key = query.data.split("#")
-    search = FRESH.get(key).replace(" ", "_")
     req = query.from_user.id
     offset = 0
     btn: list[list[InlineKeyboardButton]] = []
@@ -839,7 +838,7 @@ async def filter_seasons_cb_handler(client: Client, query: CallbackQuery):
 async def cb_handler(client: Client, query: CallbackQuery):
     DreamxData = query.data
     try:
-        link = await client.create_chat_invite_link(int(REQST_CHANNEL))
+        await client.create_chat_invite_link(int(REQST_CHANNEL))
     except Exception:
         pass
     if query.data == "close_data":
@@ -890,7 +889,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await query.answer(url=f"https://t.me/{temp.U_NAME}?start=file_{query.message.chat.id}_{file_id}")
 
     elif query.data.startswith("sendfiles"):
-        clicked = query.from_user.id
         ident, key = query.data.split("#")
         settings = await get_settings(query.message.chat.id)
         try:
@@ -1247,7 +1245,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 query.message.id,
                 InputMediaPhoto(PIC)
             )
-        except Exception as e:
+        except Exception:
             pass
         await query.message.edit_text(
             text=script.START_TXT.format(query.from_user.mention, gtxt, temp.U_NAME, temp.B_NAME),
@@ -1335,7 +1333,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 )
                 await asyncio.sleep(DELETE_TIME)
                 return await msg.delete()
-        except Exception as e:
+        except Exception:
             logging.exception("Error in give_trial callback")
 
 
@@ -1383,7 +1381,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 media=InputMediaPhoto(media=SUBSCRIPTION, caption=script.BPREMIUM_TXT, parse_mode=enums.ParseMode.HTML),
                 reply_markup=reply_markup
             )
-        except Exception as e:
+        except Exception:
             logging.exception("Exception in 'premium_info' callback")
 
 
@@ -1402,7 +1400,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 media=InputMediaPhoto(media=SUBSCRIPTION, caption=script.PREMIUM_TEXT, parse_mode=enums.ParseMode.HTML),
                 reply_markup=reply_markup
             )
-        except Exception as e:
+        except Exception:
             logging.exception("Exception in 'buy_info' callback")
 
     elif query.data == "upi_info":
@@ -1419,7 +1417,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 media=InputMediaPhoto(media=SUBSCRIPTION, caption=script.PREMIUM_UPI_TEXT.format(OWNER_UPI_ID), parse_mode=enums.ParseMode.HTML),
                 reply_markup=reply_markup
             )
-        except Exception as e:
+        except Exception:
             logging.exception("Exception in 'upi_info' callback")
 
     elif query.data == "star_info":
@@ -1437,7 +1435,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 media=InputMediaPhoto(media=SUBSCRIPTION, caption=script.PREMIUM_STAR_TEXT, parse_mode=enums.ParseMode.HTML),
                 reply_markup=reply_markup
             )
-        except Exception as e:
+        except Exception:
             logging.exception("Exception in 'star' callback")
 
 
@@ -1591,7 +1589,7 @@ async def auto_filter(client, msg, spoll=False):
             btn.insert(0,
                        [
                            InlineKeyboardButton(
-                               f'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
+                               'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
                            InlineKeyboardButton(
                                "Lᴀɴɢᴜᴀɢᴇ", callback_data=f"languages#{key}"),
                            InlineKeyboardButton(
@@ -1611,7 +1609,7 @@ async def auto_filter(client, msg, spoll=False):
             btn.insert(0,
                        [
                            InlineKeyboardButton(
-                               f'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
+                               'Qᴜᴀʟɪᴛʏ', callback_data=f"qualities#{key}"),
                            InlineKeyboardButton(
                                "Lᴀɴɢᴜᴀɢᴇ", callback_data=f"languages#{key}"),
                            InlineKeyboardButton(
@@ -1784,10 +1782,7 @@ async def ai_spell_check(chat_id, wrong_name):
         movie_list.remove(movie)
 
 async def advantage_spell_chok(client, message):
-    mv_id = message.id
     search = message.text
-    chat_id = message.chat.id
-    settings = await get_settings(chat_id)
     query = re.sub(
         r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|br((o|u)h?)*|^h(e|a)?(l)*(o)*|mal(ayalam)?|t(h)?amil|file|that|find|und(o)*|kit(t(i|y)?)?o(w)?|thar(u)?(o)*w?|kittum(o)*|aya(k)*(um(o)*)?|full\smovie|any(one)|with\ssubtitle(s)?)",
         "", message.text, flags=re.IGNORECASE)

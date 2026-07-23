@@ -1,20 +1,19 @@
 import logging
+import asyncio
+import psutil
+from time import time
 from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram.errors.exceptions.bad_request_400 import MessageTooLong, PeerIdInvalid
-from info import ADMINS,MULTIPLE_DB, LOG_CHANNEL, OWNER_LNK, MELCOW_PHOTO
-from database.users_chats_db import db, db2
+from pyrogram.errors import ChatAdminRequired
+from info import ADMINS, MULTIPLE_DB, LOG_CHANNEL, OWNER_LNK, MELCOW_PHOTO
+from database.users_chats_db import db
 from database.ia_filterdb import Media, Media2, db as db_stats, db2 as db2_stats, client, client2
 from utils import get_size, temp, get_settings, get_readable_time
 from Script import script
+from bot import botStartTime
 
 logger = logging.getLogger(__name__)
-from pyrogram.errors import ChatAdminRequired
-import asyncio
-import psutil
-import logging
-from time import time
-from bot import botStartTime
 
 """-----------------------------------------https://t.me/dreamxbotz--------------------------------------"""
 
@@ -187,7 +186,7 @@ async def get_stats(bot, message):
         ram = psutil.virtual_memory().percent
         cpu = psutil.cpu_percent()
         
-        if MULTIPLE_DB == False:
+        if not MULTIPLE_DB:
             await msg.edit(script.STATUS_TXT.format(
                 total_users, totl_chats, premium, file1, get_size(current_db_size), get_size(db_size), get_size(free), uptime, ram, cpu))                                               
             return
@@ -271,13 +270,7 @@ async def ban_a_user(bot, message):
 async def unban_a_user(bot, message):
     if len(message.command) == 1:
         return await message.reply('Give me a user id / username')
-    r = message.text.split(None)
-    if len(r) > 2:
-        reason = message.text.split(None, 2)[2]
-        chat = message.text.split(None, 2)[1]
-    else:
-        chat = message.command[1]
-        reason = "No reason Provided"
+    chat = message.command[1]
     try:
         chat = int(chat)
     except Exception:
@@ -337,13 +330,9 @@ async def list_chats(bot, message):
 
 @Client.on_message(filters.command('group_cmd'))
 async def group_commands(client, message):
-    user = message.from_user.mention
-    user_id = message.from_user.id
     await message.reply_text(script.GROUP_CMD, disable_web_page_preview=True)
 
 @Client.on_message(filters.command('admin_cmd') & filters.user(ADMINS))
 async def admin_commands(client, message):
-    user = message.from_user.mention
-    user_id = message.from_user.id
     await message.reply_text(script.ADMIN_CMD, disable_web_page_preview=True)
     

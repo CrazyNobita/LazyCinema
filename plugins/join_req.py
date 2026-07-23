@@ -1,6 +1,6 @@
 #Join Telegram Channel - @DREAMXBOTZ
 
-from pyrogram import Client, filters, enums
+from pyrogram import Client, filters
 from pyrogram.types import ChatJoinRequest
 from database.users_chats_db import db
 from info import ADMINS, AUTH_REQ_CHANNELS

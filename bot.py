@@ -1,4 +1,6 @@
-import plugins.monkey_patch
+import plugins.monkey_patch  # noqa: F401
+import logging
+import logging.config
 from pyrogram import idle, __version__
 from pyrogram.raw.all import layer
 import time
@@ -18,10 +20,8 @@ from dreamxbotz.Bot import dreamxbotz
 from dreamxbotz.util.keepalive import ping_server
 from dreamxbotz.Bot.clients import initialize_clients
 from PIL import Image
-Image.MAX_IMAGE_PIXELS = 500_000_000
 
-import logging
-import logging.config
+Image.MAX_IMAGE_PIXELS = 500_000_000
 
 logging.config.fileConfig('logging.conf')
 logging.getLogger().setLevel(logging.INFO)

@@ -1,4 +1,3 @@
-import os
 import logging
 from plugins.Dreamxfutures.fotnt_string import Fonts
 from pyrogram import Client, filters

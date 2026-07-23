@@ -2,7 +2,6 @@ import asyncio
 import logging
 import re
 from pyrogram import Client, filters
-from pyrogram.enums import ParseMode
 from pyrogram.types import (
     InlineKeyboardMarkup,
     InlineKeyboardButton,

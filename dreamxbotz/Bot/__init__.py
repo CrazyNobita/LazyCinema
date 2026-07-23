@@ -1,5 +1,9 @@
 import logging
 import logging.config
+from typing import Union, Optional, AsyncGenerator
+from pyrogram import Client, types
+from info import API_ID, API_HASH, BOT_TOKEN, SESSION
+
 logging.config.fileConfig('logging.conf')
 logging.getLogger().setLevel(logging.INFO)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
@@ -10,12 +14,6 @@ logging.basicConfig(
 )
 logging.getLogger("aiohttp").setLevel(logging.ERROR)
 logging.getLogger("aiohttp.web").setLevel(logging.ERROR)
-
-from pyrogram import Client
-from info import API_ID, API_HASH, BOT_TOKEN, SESSION
-from typing import Union, Optional, AsyncGenerator
-from pyrogram import types
-from aiohttp import web
 
 
 class dreamcinezoneXBot(Client):

@@ -3,7 +3,6 @@ import time
 import re
 import asyncio
 from pyrogram import Client, filters, enums
-from pyrogram.errors import FloodWait
 from pyrogram.errors.exceptions.bad_request_400 import ChannelInvalid, ChatAdminRequired, UsernameInvalid, UsernameNotModified
 from info import ADMINS, INDEX_REQ_CHANNEL as LOG_CHANNEL
 from database.ia_filterdb import save_file
@@ -172,7 +171,7 @@ async def index_files_to_db(lst_msg_id, chat, msg, bot):
                     messages = await bot.get_messages(chat, list(message_ids))
                     if not isinstance(messages, list):
                         messages = [messages]
-                except Exception as e:
+                except Exception:
                     errors += len(message_ids)
                     current += len(message_ids)
                     continue

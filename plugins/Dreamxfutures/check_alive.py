@@ -2,7 +2,6 @@ import time
 import asyncio
 from pyrogram import Client, filters
 import platform
-import os
 import shutil
 import logging
 from pyrogram.types import BotCommand
@@ -73,7 +72,6 @@ def get_system_info():
         with open('/proc/meminfo') as f:
             meminfo = f.readlines()
         total_ram = get_size(meminfo[0].split()[1])  
-        available_ram = get_size(meminfo[2].split()[1])  
         used_ram = get_size(int(meminfo[0].split()[1]) - int(meminfo[2].split()[1]))
     except Exception:
         total_ram, used_ram = "Unavailable", "Unavailable"

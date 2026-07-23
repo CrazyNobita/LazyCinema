@@ -360,7 +360,6 @@ async def _process_with_lock(bot, filename, caption, media_info, base_name, proc
 
 async def send_movie_update(bot, base_name):
     max_retries = 3
-    base_delay = 5
     for attempt in range(max_retries):
         try:
             movie_doc = await db.movie_updates.find_one({"_id": base_name})
@@ -482,7 +481,7 @@ def generate_movie_message(movie_doc, base_name):
         if file["quality"] != "N/A":
             all_qualities.update(q.strip() for q in file["quality"].split(",") if q.strip())
         if file["language"] != "N/A":
-            all_languages.update(l.strip() for l in file["language"].split(",") if l.strip())
+            all_languages.update(lang.strip() for lang in file["language"].split(",") if lang.strip())
         if file["ott_platform"] != "N/A":
             platforms = [p.strip() for p in file["ott_platform"].split("|") if p.strip()]
             all_ott_platforms.update(platforms)

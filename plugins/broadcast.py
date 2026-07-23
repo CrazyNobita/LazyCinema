@@ -5,7 +5,6 @@ import asyncio
 import logging
 from pyrogram import Client, filters, enums
 from pyrogram.errors.exceptions.bad_request_400 import MessageTooLong
-from pyrogram.errors import FloodWait
 from database.users_chats_db import db
 from info import ADMINS
 from utils import users_broadcast, groups_broadcast, temp, get_readable_time, clear_junk, junk_group
@@ -56,7 +55,7 @@ async def broadcast_users(bot, message):
         try:
             _, result = await users_broadcast(int(user["id"]), b_msg, is_pin)
             return result
-        except Exception as e:
+        except Exception:
             logging.exception(f"Error sending broadcast to {user['id']}")
             return "Error"
 
@@ -142,7 +141,7 @@ async def broadcast_group(bot, message):
                 break
             try:
                 sts = await groups_broadcast(int(chat['id']), b_msg, is_pin)
-            except Exception as e:
+            except Exception:
                 logging.exception(f"Error broadcasting to group {chat['id']}")
                 sts = 'Error'
             if sts == "Success":
@@ -192,7 +191,7 @@ async def remove_junkuser__db(bot, message):
     done = 0
     async for user in users:
         pti, sh = await clear_junk(int(user['id']), b_msg)
-        if pti == False:
+        if not pti:
             if sh == "Blocked":
                 blocked+=1
             elif sh == "Deleted":
@@ -223,7 +222,7 @@ async def junk_clear_group(bot, message):
     deleted = 0
     async for group in groups:
         pti, sh, ex = await junk_group(int(group['id']), b_msg)        
-        if pti == False:
+        if not pti:
             if sh == "deleted":
                 deleted+=1 
                 failed += ex 

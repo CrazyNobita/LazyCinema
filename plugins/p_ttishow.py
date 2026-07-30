@@ -257,6 +257,8 @@ async def ban_a_user(bot, message):
     except Exception as e:
         return await message.reply(f'Error - {e}')
     else:
+        if str(k.id) in {str(admin) for admin in ADMINS}:
+            return await message.reply(f"Nice try 😏 {k.mention} is my admin. Boss ko ban nahi kar sakta!")
         jar = await db.get_ban_status(k.id)
         if jar['is_banned']:
             return await message.reply(f"{k.mention} is already banned\nReason: {jar['ban_reason']}")

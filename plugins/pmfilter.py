@@ -1067,7 +1067,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             }
         }
         cfg = status_configs[key]
-        user = await client.get_users(from_user)
+        user = await client.get_users(int(from_user))
         btn = [[InlineKeyboardButton(cfg["btn_text"], callback_data=f'{cfg["alert_key"]}#{from_user}')]]
         btn2 = [[
             InlineKeyboardButton('ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ', url=UPDATE_CHNL_LNK),

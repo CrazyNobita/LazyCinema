@@ -615,10 +615,13 @@ async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
                            "𝐒ᴇᴀsᴏɴ",  callback_data=f"seasons#{req}#{key}", style=enums.ButtonStyle.DANGER)
                    ]
                    )
-        btn.insert(0,
-                   [
-                           "᯽ 🅂🄴🄽🄳 🄰🄻🄻 ᯽", callback_data=f"sendfiles#{key}", style=enums.ButtonStyle.SUCCESS)
-                   ])
+        [
+    InlineKeyboardButton(
+        "᯽ 🅂🄴🄽🄳 🄰🄻🄻 ᯽",
+        callback_data=f"sendfiles#{key}",
+        style=enums.ButtonStyle.SUCCESS
+    )
+        ]
     else:
         btn = []
         btn.insert(0,
@@ -631,12 +634,13 @@ async def filter_languages_cb_handler(client: Client, query: CallbackQuery):
                            "𝐒ᴇᴀsᴏɴ",  callback_data=f"seasons#{req}#{key}", style=enums.ButtonStyle.DANGER)
                    ]
                    )
-        btn.insert(0,
-                   [
-                       InlineKeyboardButton(
-                           "᯽ 🅂🄴🄽🄳 🄰🄻🄻 ᯽", callback_data=f"sendfiles#{key}", style=enums.ButtonStyle.SUCCESS)
-
-                   ])
+        [
+    InlineKeyboardButton(
+        "᯽ 🅂🄴🄽🄳 🄰🄻🄻 ᯽",
+        callback_data=...,
+        style=enums.ButtonStyle.SUCCESS
+    )
+        ]
     if offset != "":
         try:
             if settings['max_btn']:
@@ -762,12 +766,13 @@ async def filter_seasons_cb_handler(client: Client, query: CallbackQuery):
             InlineKeyboardButton("𝐒ᴇᴀꜱᴏɴ", callback_data=f"seasons#{req}#{key}", style=enums.ButtonStyle.DANGER),
         ],
     )
-    btn.insert(
-        0,
-        [
-            InlineKeyboardButton("᯽ 🅂🄴🄽🄳 🄰🄻🄻 ᯽", callback_data=f"sendfiles#{key}", style=enums.ButtonStyle.SUCCESS),
-        ],
+    [
+    InlineKeyboardButton(
+        "᯽ 🅂🄴🄽🄳 🄰🄻🄻 ᯽",
+        callback_data=...,
+        style=enums.ButtonStyle.SUCCESS
     )
+    ]
     if n_offset != "":
         try:
             if settings['max_btn']:
@@ -1541,12 +1546,13 @@ async def auto_filter(client, msg, spoll=False):
                                "𝐒ᴇᴀsᴏɴ",  callback_data=f"seasons#{req}#{key}", style=enums.ButtonStyle.DANGER)
                        ]
                        )
-            btn.insert(0,
-                       [
-                           InlineKeyboardButton(
-                               "᯽ 🅂🄴🄽🄳 🄰🄻🄻 ᯽", callback_data=f"sendfiles#{key}", style=enums.ButtonStyle.SUCCESS)
-
-                       ])
+            [
+    InlineKeyboardButton(
+        "᯽ 🅂🄴🄽🄳 🄰🄻🄻 ᯽",
+        callback_data=...,
+        style=enums.ButtonStyle.SUCCESS
+    )
+            ]
         else:
             btn = []
             btn.insert(0,
@@ -1559,11 +1565,13 @@ async def auto_filter(client, msg, spoll=False):
                                "𝐒ᴇᴀsᴏɴ",  callback_data=f"seasons#{req}#{key}", style=enums.ButtonStyle.DANGER)
                        ]
                        )
-            btn.insert(0,
-                       [
-                           InlineKeyboardButton(
-                               "᯽ 🅂🄴🄽🄳 🄰🄻🄻 ᯽", callback_data=f"sendfiles#{key}", style=enums.ButtonStyle.SUCCESS)
-                       ])
+            [
+    InlineKeyboardButton(
+        "᯽ 🅂🄴🄽🄳 🄰🄻🄻 ᯽",
+        callback_data=...,
+        style=enums.ButtonStyle.SUCCESS
+    )
+            ]
 
         if offset != "":
             req = message.from_user.id if message.from_user else 0

@@ -459,9 +459,13 @@ async def filter_qualities_cb_handler(client: Client, query: CallbackQuery):
                    ]
                    )
         btn.insert(0,
-                   [
-                           "᯽ 🅂🄴🄽🄳 🄰🄻🄻 ᯽", callback_data=f"sendfiles#{key}", style=enums.ButtonStyle.SUCCESS)
-                   ])
+    [
+        InlineKeyboardButton(
+            "᯽ 🅂🄴🄽🄳 🄰🄻🄻 ᯽",
+            callback_data=f"sendfiles#{key}",
+            style=enums.ButtonStyle.SUCCESS
+        )
+    ])
     else:
         btn = []
         btn.insert(0,

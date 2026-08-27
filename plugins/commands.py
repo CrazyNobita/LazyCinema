@@ -39,7 +39,7 @@ REQUEST_INVITE_LINK_CACHE: dict[int, str] = {}
 async def start(client, message):
     sticker = None
     try:
-        stick_id = "CAACAgUAAxkBAAEQJmJpViid_0yscWKPfh3RMCY8pIkmXwACMAcAAqzbsFexyKU6FPQAAjgE"
+        stick_id = "CAACAgUAAxkBAAERyopqj-d-Vhpi7DKRWUsuh_vySxWr_QAClxsAAivL4FYGOaZ8AAHy3-89BA"
         try:
             sticker = await message.reply_sticker(sticker=stick_id)
         except Exception as e:
@@ -115,14 +115,14 @@ async def start(client, message):
             await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention))
         if len(message.command) != 2:
             buttons = [[
-                        InlineKeyboardButton('🔰 ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ 🔰', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
-                    ],[
-                        InlineKeyboardButton(' ʜᴇʟᴘ 📢', callback_data='help'),
-                        InlineKeyboardButton(' ᴀʙᴏᴜᴛ 📖', callback_data='about')
-                    ],[
-                        InlineKeyboardButton('ᴛᴏᴘ sᴇᴀʀᴄʜɪɴɢ ⭐', callback_data="topsearch"),
-                        InlineKeyboardButton('ᴜᴘɢʀᴀᴅᴇ 🎟', callback_data="premium_info"),
-                    ]]
+                    InlineKeyboardButton('✧ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ✧', url=f'http://telegram.me/{temp.U_NAME}?startgroup=true', style=enums.ButtonStyle.SUCCESS)
+                ],[
+                    InlineKeyboardButton(' ✨ ᴛᴏᴘ sᴇᴀʀᴄʜɪɴɢ  ', callback_data='topsearch', style=enums.ButtonStyle.PRIMARY),
+                    InlineKeyboardButton(' ᴀʙᴏᴜᴛ 📖', callback_data='about', style=enums.ButtonStyle.DANGER)
+                ],[
+                    InlineKeyboardButton('⛑️ ʜᴇʟᴩ ', callback_data="help", style=enums.ButtonStyle.DANGER),
+                     InlineKeyboardButton('ᴜᴘɢʀᴀᴅᴇ 🎟', callback_data="premium_info", style=enums.ButtonStyle.PRIMARY),
+                ]]
             reply_markup = InlineKeyboardMarkup(buttons)
             current_time = datetime.now(pytz.timezone(TIMEZONE))
             curr_time = current_time.hour        
@@ -148,14 +148,14 @@ async def start(client, message):
 
         if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
             buttons = [[
-                        InlineKeyboardButton('🔰 ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ 🔰', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
-                    ],[
-                        InlineKeyboardButton(' ʜᴇʟᴘ 📢', callback_data='help'),
-                        InlineKeyboardButton(' ᴀʙᴏᴜᴛ 📖', callback_data='about')
-                    ],[
-                        InlineKeyboardButton('ᴛᴏᴘ sᴇᴀʀᴄʜɪɴɢ ⭐', callback_data="topsearch"),
-                        InlineKeyboardButton('ᴜᴘɢʀᴀᴅᴇ 🎟', callback_data="premium_info"),
-                    ]]
+                    InlineKeyboardButton('✧ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ✧', url=f'http://telegram.me/{temp.U_NAME}?startgroup=true', style=enums.ButtonStyle.SUCCESS)
+                ],[
+                    InlineKeyboardButton(' ✨ ᴛᴏᴘ sᴇᴀʀᴄʜɪɴɢ  ', callback_data='topsearch', style=enums.ButtonStyle.PRIMARY),
+                    InlineKeyboardButton(' ᴀʙᴏᴜᴛ 📖', callback_data='about', style=enums.ButtonStyle.DANGER)
+                ],[
+                    InlineKeyboardButton('⛑️ ʜᴇʟᴩ ', callback_data="help", style=enums.ButtonStyle.DANGER),
+                     InlineKeyboardButton('ᴜᴘɢʀᴀᴅᴇ 🎟', callback_data="premium_info", style=enums.ButtonStyle.PRIMARY),
+                ]]
             reply_markup = InlineKeyboardMarkup(buttons)
             current_time = datetime.now(pytz.timezone(TIMEZONE))
             curr_time = current_time.hour        
@@ -223,7 +223,7 @@ async def start(client, message):
 
         if len(message.command) == 2 and message.command[1] in ["premium"]:
             buttons = [[
-                        InlineKeyboardButton('📲 ꜱᴇɴᴅ ᴘᴀʏᴍᴇɴᴛ ꜱᴄʀᴇᴇɴꜱʜᴏᴛ', url=OWNER_LNK)
+                        InlineKeyboardButton('📲 ꜱᴇɴᴅ ᴘᴀʏᴍᴇɴᴛ ꜱᴄʀᴇᴇɴꜱʜᴏᴛ', url=OWNER_LNK, style=enums.ButtonStyle.SUCCESS)
                       ],[
                         InlineKeyboardButton('UPI ID Copy Karein ??', copy_text=OWNER_UPI_ID, style=enums.ButtonStyle.PRIMARY)
                       ],[
@@ -271,7 +271,7 @@ async def start(client, message):
                     if len(message.command) > 1 and "_" in message.command[1]:
                         kk, file_id = message.command[1].split("_", 1)
                         btn.append([
-                            InlineKeyboardButton("♻️ ᴛʀʏ ᴀɢᴀɪɴ ♻️", callback_data=f"checksub#{kk}#{file_id}")
+                            InlineKeyboardButton("♻️ ᴛʀʏ ᴀɢᴀɪɴ ♻️", callback_data=f"checksub#{kk}#{file_id}", style=enums.ButtonStyle.PRIMARY)
                         ])
                         reply_markup = InlineKeyboardMarkup(btn)
                     photo = random.choice(FSUB_PICS) if FSUB_PICS else "https://graph.org/file/7478ff3eac37f4329c3d8.jpg"
@@ -310,9 +310,9 @@ async def start(client, message):
                     else:
                         howtodownload = settings.get('tutorial_2', TUTORIAL_2) if is_second_shortener else settings.get('tutorial', TUTORIAL)
                     buttons = [[
-                        InlineKeyboardButton(text="♻️ ᴄʟɪᴄᴋ ʜᴇʀᴇ ᴛᴏ ᴠᴇʀɪꜰʏ ♻️", url=verify)
+                        InlineKeyboardButton(text="♻️ ᴄʟɪᴄᴋ ʜᴇʀᴇ ᴛᴏ ᴠᴇʀɪꜰʏ ♻️", url=verify, style=enums.ButtonStyle.PRIMARY)
                     ],[
-                        InlineKeyboardButton(text="⁉️ ʜᴏᴡ ᴛᴏ ᴠᴇʀɪꜰʏ ⁉️", url=howtodownload)
+                        InlineKeyboardButton(text="⁉️ ʜᴏᴡ ᴛᴏ ᴠᴇʀɪꜰʏ ⁉️", url=howtodownload, style=enums.ButtonStyle.DANGER)
                     ]]
                     reply_markup=InlineKeyboardMarkup(buttons)
                     if await db.user_verified(user_id): 
@@ -482,22 +482,19 @@ async def start(client, message):
 async def stream_buttons(user_id: int, file_id: str):
     if STREAM_MODE and not PREMIUM_STREAM_MODE:
         return [
-            [InlineKeyboardButton('🚀 ꜰᴀꜱᴛ ᴅᴏᴡɴʟᴏᴀᴅ / ᴡᴀᴛᴄʜ ᴏɴʟɪɴᴇ 🖥️', callback_data=f'generate_stream_link:{file_id}')],
-            [InlineKeyboardButton('ℹ️ ᴠɪᴇᴡ ᴀᴜᴅɪᴏ & ꜱᴜʙꜱ ɪɴꜰᴏ ℹ️', callback_data=f'extract_data:{file_id}')],
-            [InlineKeyboardButton('📌 ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 📌', url=UPDATE_CHNL_LNK)]
+            [InlineKeyboardButton('🚀 ꜰᴀꜱᴛ ᴅᴏᴡɴʟᴏᴀᴅ / ᴡᴀᴛᴄʜ ᴏɴʟɪɴᴇ 🖥️', callback_data=f'generate_stream_link:{file_id}', style=enums.ButtonStyle.SUCCESS)],
+            [InlineKeyboardButton('📌 ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 📌', url=UPDATE_CHNL_LNK, style=enums.ButtonStyle.PRIMARY)]
         ]
     elif STREAM_MODE and PREMIUM_STREAM_MODE:
         if not await db.has_premium_access(user_id):
             return [
-                [InlineKeyboardButton('🚀 ꜰᴀꜱᴛ ᴅᴏᴡɴʟᴏᴀᴅ / ᴡᴀᴛᴄʜ ᴏɴʟɪɴᴇ 🖥️', callback_data='prestream')],
-                [InlineKeyboardButton('ℹ️ ᴠɪᴇᴡ ᴀᴜᴅɪᴏ & ꜱᴜʙꜱ ɪɴꜰᴏ ℹ️', callback_data='prestream')],
-                [InlineKeyboardButton('📌 ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 📌', url=UPDATE_CHNL_LNK)]
+                [InlineKeyboardButton('🚀 ꜰᴀꜱᴛ ᴅᴏᴡɴʟᴏᴀᴅ / ᴡᴀᴛᴄʜ ᴏɴʟɪɴᴇ 🖥️', callback_data='prestream', style=enums.ButtonStyle.SUCCESS)],
+                [InlineKeyboardButton('📌 ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 📌', url=UPDATE_CHNL_LNK, style=enums.ButtonStyle.PRIMARY)]
             ]
         else:
             return [
-                [InlineKeyboardButton('🚀 ꜰᴀꜱᴛ ᴅᴏᴡɴʟᴏᴀᴅ / ᴡᴀᴛᴄʜ ᴏɴʟɪɴᴇ 🖥️', callback_data=f'generate_stream_link:{file_id}')],
-                [InlineKeyboardButton('ℹ️ ᴠɪᴇᴡ ᴀᴜᴅɪᴏ & ꜱᴜʙꜱ ɪɴꜰᴏ ℹ️', callback_data=f'extract_data:{file_id}')],
-                [InlineKeyboardButton('📌 ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 📌', url=UPDATE_CHNL_LNK)]
+                [InlineKeyboardButton('🚀 ꜰᴀꜱᴛ ᴅᴏᴡɴʟᴏᴀᴅ / ᴡᴀᴛᴄʜ ᴏɴʟɪɴᴇ 🖥️', callback_data=f'generate_stream_link:{file_id}', style=enums.ButtonStyle.SUCCESS)],
+                [InlineKeyboardButton('📌 ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 📌', url=UPDATE_CHNL_LNK, style=enums.ButtonStyle.PRIMARY)]
             ]
     else:
         return [[InlineKeyboardButton('📌 ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 📌', url=UPDATE_CHNL_LNK)]]
@@ -506,7 +503,7 @@ async def stream_buttons(user_id: int, file_id: str):
 async def log_file(bot, message):
     """Send log file"""
     try:
-        await message.reply_document('DreamXlogs.txt', caption="📑 **ʟᴏɢꜱ**")
+        await message.reply_document('ProviderBotz.txt', caption="📑 **ʟᴏɢꜱ**")
     except Exception as e:
         await message.reply(str(e))
 
@@ -836,7 +833,7 @@ async def deletemultiplefiles(bot, message):
         return
     await k.delete()
     btn = [[
-       InlineKeyboardButton("⚠️ Yes, Continue ! ⚠️", callback_data=f"killfilesdq#{keyword}")
+       InlineKeyboardButton("⚠️ Yes, Continue ! ⚠️", callback_data=f"killfilesdq#{keyword}", style=enums.ButtonStyle.SUCCESS)
        ],[
        InlineKeyboardButton("❌ No, Abort operation ! ❌", callback_data="close_data", style=enums.ButtonStyle.DANGER)
     ]]
@@ -1061,7 +1058,7 @@ async def set_tutorial(client, message: Message):
     except IndexError:
         return await message.reply_text(
             f"<b>ᴄᴏᴍᴍᴀɴᴅ ɪɴᴄᴏᴍᴘʟᴇᴛᴇ !!\n\nᴜꜱᴇ ʟɪᴋᴇ ᴛʜɪꜱ -</b>\n\n"
-            f"<code>/{message.command[0]} https://t.me/dreamxbotz</code>"
+            f"<code>/{message.command[0]} https://t.me/ProviderBotz</code>"
         )
     if message.command[0] == "set_tutorial":
         tutorial_key = "tutorial"
@@ -1227,7 +1224,7 @@ async def all_settings(client, message):
         return await message.reply_text(f"<b>⚠️ ᴇʀʀᴏʀ ꜰᴇᴛᴄʜɪɴɢ ꜱᴇᴛᴛɪɴɢꜱ:</b>\n<code>{e}</code>")
     text = generate_settings_text(settings, title)
     btn = [
-        [InlineKeyboardButton("♻️ ʀᴇꜱᴇᴛ ꜱᴇᴛᴛɪɴɢꜱ", callback_data=f"reset_group_{grp_id}")],
+        [InlineKeyboardButton("♻️ ʀᴇꜱᴇᴛ ꜱᴇᴛᴛɪɴɢꜱ", callback_data=f"reset_group_{grp_id}", style=enums.ButtonStyle.SUCCESS)],
         [InlineKeyboardButton("🚫 ᴄʟᴏꜱᴇ", callback_data="close_data", style=enums.ButtonStyle.DANGER)]
     ]
     dlt = await message.reply_text(text, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True)
@@ -1271,7 +1268,7 @@ async def reset_group_callback(client, callback_query):
     title = callback_query.message.chat.title
     text = generate_settings_text(updated, title, reset_done=True)
     buttons = [
-        [InlineKeyboardButton("♻️ ʀᴇꜱᴇᴛ ꜱᴇᴛᴛɪɴɢꜱ", callback_data=f"reset_group_{grp_id}")],
+        [InlineKeyboardButton("♻️ ʀᴇꜱᴇᴛ ꜱᴇᴛᴛɪɴɢꜱ", callback_data=f"reset_group_{grp_id}", style=enums.ButtonStyle.SUCCESS)],
         [InlineKeyboardButton("🚫 ᴄʟᴏꜱᴇ", callback_data="close_data", style=enums.ButtonStyle.DANGER)]
     ]
     await callback_query.message.edit_text(text, reply_markup=InlineKeyboardMarkup(buttons), disable_web_page_preview=True)

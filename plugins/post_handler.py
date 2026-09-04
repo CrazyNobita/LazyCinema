@@ -533,8 +533,7 @@ async def update_post_preview(
                 session["last_preview_message_id"],
                 text_content,
                 reply_markup=keyboard,
-                disable_web_page_preview=False,
-                invert_media=ABOVE_PREVIEW
+                disable_web_page_preview=False
             )
 
     except MessageNotModified:

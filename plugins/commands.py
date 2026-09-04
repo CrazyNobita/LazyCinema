@@ -82,7 +82,7 @@ async def start(client, message):
                 verifiedfiles = f"https://telegram.me/{temp.U_NAME}?start=file_{grp_id}_{file_id}"
             await client.send_message(settings['log'], script.VERIFIED_LOG_TEXT.format(m.from_user.mention, user_id, datetime.now(pytz.timezone('Asia/Kolkata')).strftime('%d %B %Y'), num))
             btn = [[
-                InlineKeyboardButton("✅ ᴄʟɪᴄᴋ ʜᴇʀᴇ ᴛᴏ ɢᴇᴛ ꜰɪʟᴇ ✅", url=verifiedfiles),
+                InlineKeyboardButton("✅ ᴄʟɪᴄᴋ ʜᴇʀᴇ ᴛᴏ ɢᴇᴛ ꜰɪʟᴇ ✅", url=verifiedfiles, style=enums.ButtonStyle.PRIMARY),
             ]]
             reply_markup=InlineKeyboardMarkup(btn)
             dlt=await m.reply_photo(
@@ -97,9 +97,9 @@ async def start(client, message):
             return         
         if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
             buttons = [[
-                        InlineKeyboardButton('❤️ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ❤️', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
+                        InlineKeyboardButton('❤️ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ❤️', url=f'http://t.me/{temp.U_NAME}?startgroup=true, style=enums.ButtonStyle.PRIMARY')
                     ],[
-                        InlineKeyboardButton('🍁 Update Channel 🍁', url=UPDATE_CHNL_LNK)
+                        InlineKeyboardButton('🍁 Update Channel 🍁', url=UPDATE_CHNL_LNK, style=enums.ButtonStyle.SUCCESS)
                       ]]
             reply_markup = InlineKeyboardMarkup(buttons)
             await message.reply(script.GSTART_TXT.format(message.from_user.mention if message.from_user else message.chat.title, temp.U_NAME, temp.B_NAME), reply_markup=reply_markup, disable_web_page_preview=True)
@@ -503,7 +503,7 @@ async def stream_buttons(user_id: int, file_id: str):
 async def log_file(bot, message):
     """Send log file"""
     try:
-        await message.reply_document('ProviderBotz.txt', caption="📑 **ʟᴏɢꜱ**")
+        await message.reply_document('DreamXBotz.txt', caption="📑 **ʟᴏɢꜱ**")
     except Exception as e:
         await message.reply(str(e))
 
@@ -642,9 +642,9 @@ async def settings(client, message):
             return await message.reply_text(script.NT_ADMIN_ALRT_TXT)
         await db.connect_group(grp_id, user_id)
         btn = [[
-                InlineKeyboardButton("👤 ᴏᴘᴇɴ ɪɴ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ 👤", callback_data=f"opnsetpm#{grp_id}")
+                InlineKeyboardButton("👤 ᴏᴘᴇɴ ɪɴ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ 👤", callback_data=f"opnsetpm#{grp_id}, style=enums.ButtonStyle.PRIMARY")
               ],[
-                InlineKeyboardButton("👥 ᴏᴘᴇɴ ʜᴇʀᴇ 👥", callback_data=f"opnsetgrp#{grp_id}")
+                InlineKeyboardButton("👥 ᴏᴘᴇɴ ʜᴇʀᴇ 👥", callback_data=f"opnsetgrp#{grp_id}, style=enums.ButtonStyle.SUCCESS")
               ]]
         await message.reply_text(
                 text="<b>ᴡʜᴇʀᴇ ᴅᴏ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴏᴘᴇɴ ꜱᴇᴛᴛɪɴɢꜱ ᴍᴇɴᴜ ? ⚙️</b>",
@@ -777,7 +777,7 @@ async def requests(bot, message):
                     invite_link = None
             if invite_link:
                 btn = [[
-                    InlineKeyboardButton('ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ', url=invite_link),
+                    InlineKeyboardButton('ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ', url=invite_link, style=enums.ButtonStyle.PRIMARY),
                     InlineKeyboardButton('ᴠɪᴇᴡ ʀᴇǫᴜᴇꜱᴛ', url=reported_post.link)
                 ]]
                 await message.reply_text("<b>ʏᴏᴜʀ ʀᴇǫᴜᴇꜱᴛ ʜᴀꜱ ʙᴇᴇɴ ᴀᴅᴅᴇᴅ! ᴘʟᴇᴀꜱᴇ ᴡᴀɪᴛ ꜰᴏʀ ꜱᴏᴍᴇ ᴛɪᴍᴇ.\n\nᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ ꜰɪʀꜱᴛ & ᴠɪᴇᴡ ʀᴇǫᴜᴇꜱᴛ.</b>", reply_markup=InlineKeyboardMarkup(btn))

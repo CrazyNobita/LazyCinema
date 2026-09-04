@@ -1,184 +1,594 @@
+# ============================================================
+# Font Generator Bot
+# Powered by ProviderBotz
+# Font source: font_string.py
+# ============================================================
+
 import logging
-from plugins.Dreamxfutures.font_string import Fonts
-from pyrogram import Client, filters
+
+from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+from plugins.Dreamxfutures.font_string import Fonts
 
 
 logger = logging.getLogger(__name__)
 
-@Client.on_message(filters.private & filters.command(["font"]))
-async def style_buttons(c, m, cb=False):
-    buttons = [[
-        InlineKeyboardButton('𝚃𝚢𝚙𝚎𝚠𝚛𝚒𝚝𝚎𝚛', callback_data='style+typewriter'),
-        InlineKeyboardButton('𝕆𝕦𝕥𝕝𝕚𝕟𝕖', callback_data='style+outline'),
-        InlineKeyboardButton('𝐒𝐞𝐫𝐢𝐟', callback_data='style+serif'),
-        ],[
-        InlineKeyboardButton('𝑺𝒆𝒓𝒊𝒇', callback_data='style+bold_cool'),
-        InlineKeyboardButton('𝑆𝑒𝑟𝑖𝑓', callback_data='style+cool'),
-        InlineKeyboardButton('Sᴍᴀʟʟ Cᴀᴘs', callback_data='style+small_cap'),
-        ],[
-        InlineKeyboardButton('𝓈𝒸𝓇𝒾𝓅𝓉', callback_data='style+script'),
-        InlineKeyboardButton('𝓼𝓬𝓻𝓲𝓹𝓽', callback_data='style+script_bolt'),
-        InlineKeyboardButton('ᵗⁱⁿʸ', callback_data='style+tiny'),
-        ],[
-        InlineKeyboardButton('ᑕOᗰIᑕ', callback_data='style+comic'),
-        InlineKeyboardButton('𝗦𝗮𝗻𝘀', callback_data='style+sans'),
-        InlineKeyboardButton('𝙎𝙖𝙣𝙨', callback_data='style+slant_sans'),
-        ],[
-        InlineKeyboardButton('𝘚𝘢𝘯𝘴', callback_data='style+slant'),
-        InlineKeyboardButton('𝖲𝖺𝗇𝗌', callback_data='style+sim'),
-        InlineKeyboardButton('Ⓒ︎Ⓘ︎Ⓡ︎Ⓒ︎Ⓛ︎Ⓔ︎Ⓢ︎', callback_data='style+circles')
-        ],[
-        InlineKeyboardButton('🅒︎🅘︎🅡︎🅒︎🅛︎🅔︎🅢︎', callback_data='style+circle_dark'),
-        InlineKeyboardButton('𝔊𝔬𝔱𝔥𝔦𝔠', callback_data='style+gothic'),
-        InlineKeyboardButton('𝕲𝖔𝖙𝖍𝖎𝖈', callback_data='style+gothic_bolt'),
-        ],[
-        InlineKeyboardButton('C͜͡l͜͡o͜͡u͜͡d͜͡s͜͡', callback_data='style+cloud'),
-        InlineKeyboardButton('H̆̈ă̈p̆̈p̆̈y̆̈', callback_data='style+happy'),
-        InlineKeyboardButton('S̑̈ȃ̈d̑̈', callback_data='style+sad'),
-        ],[
-        InlineKeyboardButton('Next ➡️', callback_data="nxt")
-    ]]
-    if not cb:
-        if ' ' in m.text:
-            title = m.text.split(" ", 1)[1]
-            await m.reply_text(title, reply_markup=InlineKeyboardMarkup(buttons), reply_to_message_id=m.id)                     
-        else:
-            await m.reply_text(text="Enter Any Text Eg:- `/font [text]`")    
-    else:
-        await m.answer()
-        await m.message.edit_reply_markup(InlineKeyboardMarkup(buttons))
+
+# ============================================================
+# FONT STYLES
+# Powered by ProviderBotz
+# ============================================================
+
+FONT_STYLES = {
+    "typewriter": Fonts.typewriter,
+    "outline": Fonts.outline,
+    "serif": Fonts.serief,
+    "bold_cool": Fonts.bold_cool,
+    "cool": Fonts.cool,
+    "small_cap": Fonts.smallcap,
+    "script": Fonts.script,
+    "script_bolt": Fonts.bold_script,
+    "tiny": Fonts.tiny,
+    "comic": Fonts.comic,
+    "sans": Fonts.san,
+    "slant_sans": Fonts.slant_san,
+    "slant": Fonts.slant,
+    "sim": Fonts.sim,
+    "circles": Fonts.circles,
+    "circle_dark": Fonts.dark_circle,
+    "gothic": Fonts.gothic,
+    "gothic_bolt": Fonts.bold_gothic,
+    "cloud": Fonts.cloud,
+    "happy": Fonts.happy,
+    "sad": Fonts.sad,
+
+    "special": Fonts.special,
+    "squares": Fonts.square,
+    "squares_bold": Fonts.dark_square,
+    "andalucia": Fonts.andalucia,
+    "manga": Fonts.manga,
+    "stinky": Fonts.stinky,
+    "bubbles": Fonts.bubbles,
+    "underline": Fonts.underline,
+    "ladybug": Fonts.ladybug,
+    "rays": Fonts.rays,
+    "birds": Fonts.birds,
+    "slash": Fonts.slash,
+    "stop": Fonts.stop,
+    "skyline": Fonts.skyline,
+    "arrows": Fonts.arrows,
+    "qvnes": Fonts.rvnes,
+    "strike": Fonts.strike,
+    "frozen": Fonts.frozen,
+}
 
 
-@Client.on_callback_query(filters.regex('^nxt'))
-async def nxt(c, m):
-    if m.data == "nxt":
-        buttons = [[
-            InlineKeyboardButton('🇸 🇵 🇪 🇨 🇮 🇦 🇱 ', callback_data='style+special'),
-            InlineKeyboardButton('🅂🅀🅄🄰🅁🄴🅂', callback_data='style+squares'),
-            InlineKeyboardButton('🆂︎🆀︎🆄︎🅰︎🆁︎🅴︎🆂︎', callback_data='style+squares_bold'),
-            ],[
-            InlineKeyboardButton('ꪖꪀᦔꪖꪶꪊᥴ𝓲ꪖ', callback_data='style+andalucia'),
-            InlineKeyboardButton('爪卂几ᘜ卂', callback_data='style+manga'),
-            InlineKeyboardButton('S̾t̾i̾n̾k̾y̾', callback_data='style+stinky'),
-            ],[
-            InlineKeyboardButton('B̥ͦu̥ͦb̥ͦb̥ͦl̥ͦe̥ͦs̥ͦ', callback_data='style+bubbles'),
-            InlineKeyboardButton('U͟n͟d͟e͟r͟l͟i͟n͟e͟', callback_data='style+underline'),
-            InlineKeyboardButton('꒒ꍏꀷꌩꌃꀎꁅ', callback_data='style+ladybug'),
-            ],[
-            InlineKeyboardButton('R҉a҉y҉s҉', callback_data='style+rays'),
-            InlineKeyboardButton('B҈i҈r҈d҈s҈', callback_data='style+birds'),
-            InlineKeyboardButton('S̸l̸a̸s̸h̸', callback_data='style+slash'),
-            ],[
-            InlineKeyboardButton('s⃠t⃠o⃠p⃠', callback_data='style+stop'),
-            InlineKeyboardButton('S̺͆k̺͆y̺͆l̺͆i̺͆n̺͆e̺͆', callback_data='style+skyline'),
-            InlineKeyboardButton('A͎r͎r͎o͎w͎s͎', callback_data='style+arrows'),
-            ],[
-            InlineKeyboardButton('ዪሀክቿነ', callback_data='style+qvnes'),
-            InlineKeyboardButton('S̶t̶r̶i̶k̶e̶', callback_data='style+strike'),
-            InlineKeyboardButton('F༙r༙o༙z༙e༙n༙', callback_data='style+frozen')
-            ],[
-            InlineKeyboardButton('⬅️ Back', callback_data='nxt+0')
-        ]]
-        await m.answer()
-        await m.message.edit_reply_markup(InlineKeyboardMarkup(buttons))
-    else:
-        await style_buttons(c, m, cb=True)
+# ============================================================
+# PAGE 1
+# PRIMARY + SUCCESS + DANGER BUTTONS
+# Powered by ProviderBotz
+# ============================================================
+
+def first_page_buttons():
+
+    buttons = [
+
+        [
+            InlineKeyboardButton(
+                "𝚃𝚢𝚙𝚎𝚠𝚛𝚒𝚝𝚎𝚛",
+                callback_data="style+typewriter",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+
+            InlineKeyboardButton(
+                "𝕆𝕦𝕥𝕝𝕚𝕟𝕖",
+                callback_data="style+outline",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+
+            InlineKeyboardButton(
+                "𝐒𝐞𝐫𝐢𝐟",
+                callback_data="style+serif",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+        ],
+
+        [
+            InlineKeyboardButton(
+                "𝑺𝒆𝒓𝒊𝒇",
+                callback_data="style+bold_cool",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+
+            InlineKeyboardButton(
+                "𝑆𝑒𝑟𝑖𝑓",
+                callback_data="style+cool",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+
+            InlineKeyboardButton(
+                "Sᴍᴀʟʟ Cᴀᴘs",
+                callback_data="style+small_cap",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+        ],
+
+        [
+            InlineKeyboardButton(
+                "𝓈𝒸𝓇𝒾𝓅𝓉",
+                callback_data="style+script",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+
+            InlineKeyboardButton(
+                "𝓼𝓬𝓻𝓲𝓹𝓽",
+                callback_data="style+script_bolt",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+
+            InlineKeyboardButton(
+                "ᵗⁱⁿʸ",
+                callback_data="style+tiny",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+        ],
+
+        [
+            InlineKeyboardButton(
+                "ᑕOᗰIᑕ",
+                callback_data="style+comic",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+
+            InlineKeyboardButton(
+                "𝗦𝗮𝗻𝘀",
+                callback_data="style+sans",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+
+            InlineKeyboardButton(
+                "𝙎𝙖𝙣𝙨",
+                callback_data="style+slant_sans",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+        ],
+
+        [
+            InlineKeyboardButton(
+                "𝘚𝘢𝘯𝘴",
+                callback_data="style+slant",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+
+            InlineKeyboardButton(
+                "𝖲𝖺𝗇𝗌",
+                callback_data="style+sim",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+
+            InlineKeyboardButton(
+                "Ⓒ︎Ⓘ︎Ⓡ︎Ⓒ︎Ⓛ︎Ⓔ︎Ⓢ︎",
+                callback_data="style+circles",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+        ],
+
+        [
+            InlineKeyboardButton(
+                "🅒︎🅘︎🅡︎🅒︎🅛︎🅔︎🅢︎",
+                callback_data="style+circle_dark",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+
+            InlineKeyboardButton(
+                "𝔊𝔬𝔱𝔥𝔦𝔠",
+                callback_data="style+gothic",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+
+            InlineKeyboardButton(
+                "𝕲𝖔𝖙𝖍𝖎𝖈",
+                callback_data="style+gothic_bolt",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+        ],
+
+        [
+            InlineKeyboardButton(
+                "C͜͡l͜͡o͜͡u͜͡d͜͡s͜͡",
+                callback_data="style+cloud",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+
+            InlineKeyboardButton(
+                "H̆̈ă̈p̆̈p̆̈y̆̈",
+                callback_data="style+happy",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+
+            InlineKeyboardButton(
+                "S̑̈ȃ̈d̑̈",
+                callback_data="style+sad",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+        ],
+
+        [
+            InlineKeyboardButton(
+                "Next ➡️",
+                callback_data="nxt",
+                style=enums.ButtonStyle.PRIMARY
+            )
+        ],
+
+        [
+            InlineKeyboardButton(
+                "✖️ Close",
+                callback_data="font_close",
+                style=enums.ButtonStyle.DANGER
+            )
+        ]
+    ]
+
+    return InlineKeyboardMarkup(buttons)
 
 
-@Client.on_callback_query(filters.regex('^style'))
-async def style(c, m):
-    await m.answer()
-    cmd, style = m.data.split('+')
+# ============================================================
+# PAGE 2
+# PRIMARY + SUCCESS + DANGER BUTTONS
+# Powered by ProviderBotz
+# ============================================================
 
-    if style == 'typewriter':
-        cls = Fonts.typewriter
-    if style == 'outline':
-        cls = Fonts.outline
-    if style == 'serif':
-        cls = Fonts.serief
-    if style == 'bold_cool':
-        cls = Fonts.bold_cool
-    if style == 'cool':
-        cls = Fonts.cool
-    if style == 'small_cap':
-        cls = Fonts.smallcap
-    if style == 'script':
-        cls = Fonts.script
-    if style == 'script_bolt':
-        cls = Fonts.bold_script
-    if style == 'tiny':
-        cls = Fonts.tiny
-    if style == 'comic':
-        cls = Fonts.comic
-    if style == 'sans':
-        cls = Fonts.san
-    if style == 'slant_sans':
-        cls = Fonts.slant_san
-    if style == 'slant':
-        cls = Fonts.slant
-    if style == 'sim':
-        cls = Fonts.sim
-    if style == 'circles':
-        cls = Fonts.circles
-    if style == 'circle_dark':
-        cls = Fonts.dark_circle
-    if style == 'gothic':
-        cls = Fonts.gothic
-    if style == 'gothic_bolt':
-        cls = Fonts.bold_gothic
-    if style == 'cloud':
-        cls = Fonts.cloud
-    if style == 'happy':
-        cls = Fonts.happy
-    if style == 'sad':
-        cls = Fonts.sad
-    if style == 'special':
-        cls = Fonts.special
-    if style == 'squares':
-        cls = Fonts.square
-    if style == 'squares_bold':
-        cls = Fonts.dark_square
-    if style == 'andalucia':
-        cls = Fonts.andalucia
-    if style == 'manga':
-        cls = Fonts.manga
-    if style == 'stinky':
-        cls = Fonts.stinky
-    if style == 'bubbles':
-        cls = Fonts.bubbles
-    if style == 'underline':
-        cls = Fonts.underline
-    if style == 'ladybug':
-        cls = Fonts.ladybug
-    if style == 'rays':
-        cls = Fonts.rays
-    if style == 'birds':
-        cls = Fonts.birds
-    if style == 'slash':
-        cls = Fonts.slash
-    if style == 'stop':
-        cls = Fonts.stop
-    if style == 'skyline':
-        cls = Fonts.skyline
-    if style == 'arrows':
-        cls = Fonts.arrows
-    if style == 'qvnes':
-        cls = Fonts.rvnes
-    if style == 'strike':
-        cls = Fonts.strike
-    if style == 'frozen':
-        cls = Fonts.frozen
+def second_page_buttons():
 
-    if m.message.reply_to_message and m.message.reply_to_message.text:
-        try:
-            oldtxt = m.message.reply_to_message.text.split(None, 1)[1]
-        except IndexError:
-            oldtxt = m.message.text
-    else:
-        oldtxt = m.message.text
-    new_text = cls(oldtxt)            
+    buttons = [
+
+        [
+            InlineKeyboardButton(
+                "🇸 🇵 🇪 🇨 🇮 🇦 🇱 ",
+                callback_data="style+special",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+
+            InlineKeyboardButton(
+                "🅂🅀🅄🄰🅁🄴🅂",
+                callback_data="style+squares",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+
+            InlineKeyboardButton(
+                "🆂︎🆀︎🆄︎🅰︎🆁︎🅴︎🆂︎",
+                callback_data="style+squares_bold",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+        ],
+
+        [
+            InlineKeyboardButton(
+                "ꪖꪀᦔꪖꪶꪊᥴ𝓲ꪖ",
+                callback_data="style+andalucia",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+
+            InlineKeyboardButton(
+                "爪卂几ᘜ卂",
+                callback_data="style+manga",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+
+            InlineKeyboardButton(
+                "S̾t̾i̾n̾k̾y̾",
+                callback_data="style+stinky",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+        ],
+
+        [
+            InlineKeyboardButton(
+                "B̥ͦu̥ͦb̥ͦb̥ͦl̥ͦe̥ͦs̥ͦ",
+                callback_data="style+bubbles",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+
+            InlineKeyboardButton(
+                "U͟n͟d͟e͟r͟l͟i͟n͟e͟",
+                callback_data="style+underline",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+
+            InlineKeyboardButton(
+                "꒒ꍏꀷꌩꌃꀎꁅ",
+                callback_data="style+ladybug",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+        ],
+
+        [
+            InlineKeyboardButton(
+                "R҉a҉y҉s҉",
+                callback_data="style+rays",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+
+            InlineKeyboardButton(
+                "B҈i҈r҈d҈s҈",
+                callback_data="style+birds",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+
+            InlineKeyboardButton(
+                "S̸l̸a̸s̸h̸",
+                callback_data="style+slash",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+        ],
+
+        [
+            InlineKeyboardButton(
+                "s⃠t⃠o⃠p⃠",
+                callback_data="style+stop",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+
+            InlineKeyboardButton(
+                "S̺͆k̺͆y̺͆l̺͆i̺͆n̺͆e̺͆",
+                callback_data="style+skyline",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+
+            InlineKeyboardButton(
+                "A͎r͎r͎o͎w͎s͎",
+                callback_data="style+arrows",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+        ],
+
+        [
+            InlineKeyboardButton(
+                "ዪሀክቿነ",
+                callback_data="style+qvnes",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+
+            InlineKeyboardButton(
+                "S̶t̶r̶i̶k̶e̶",
+                callback_data="style+strike",
+                style=enums.ButtonStyle.PRIMARY
+            ),
+
+            InlineKeyboardButton(
+                "F༙r༙o༙z༙e༙n༙",
+                callback_data="style+frozen",
+                style=enums.ButtonStyle.SUCCESS
+            ),
+        ],
+
+        [
+            InlineKeyboardButton(
+                "⬅️ Back",
+                callback_data="nxt+0",
+                style=enums.ButtonStyle.PRIMARY
+            )
+        ],
+
+        [
+            InlineKeyboardButton(
+                "✖️ Close",
+                callback_data="font_close",
+                style=enums.ButtonStyle.DANGER
+            )
+        ]
+    ]
+
+    return InlineKeyboardMarkup(buttons)
+
+
+# ============================================================
+# /font COMMAND
+# Powered by ProviderBotz
+# ============================================================
+
+@Client.on_message(filters.private & filters.command("font"))
+async def font_command(client, message):
+
     try:
-        await m.message.edit_text(f"`{new_text}`\n\n👆 Click To Copy", reply_markup=m.message.reply_markup)
+
+        if not message.text:
+            return
+
+        # Get text after /font
+        parts = message.text.split(None, 1)
+
+        if len(parts) < 2 or not parts[1].strip():
+
+            await message.reply_text(
+                "❌ <b>Please enter some text.</b>\n\n"
+                "<b>Example:</b>\n"
+                "<code>/font ProviderBotz</code>"
+            )
+
+            return
+
+        title = parts[1].strip()
+
+        await message.reply_text(
+            title,
+            reply_markup=first_page_buttons(),
+            reply_to_message_id=message.id
+        )
+
     except Exception as e:
-        logger.error("Font style edit error: %s", e)
+
+        logger.exception(
+            "Font command error: %s",
+            e
+        )
+
+        await message.reply_text(
+            "❌ Something went wrong while opening the font generator."
+        )
+
+
+# ============================================================
+# NEXT / BACK BUTTON
+# Powered by ProviderBotz
+# ============================================================
+
+@Client.on_callback_query(filters.regex(r"^nxt"))
+async def next_page(client, callback_query):
+
+    try:
+
+        if callback_query.data == "nxt":
+
+            await callback_query.answer()
+
+            await callback_query.message.edit_reply_markup(
+                second_page_buttons()
+            )
+
+        elif callback_query.data == "nxt+0":
+
+            await callback_query.answer()
+
+            await callback_query.message.edit_reply_markup(
+                first_page_buttons()
+            )
+
+    except Exception as e:
+
+        logger.exception(
+            "Next/Back button error: %s",
+            e
+        )
+
+        try:
+            await callback_query.answer(
+                "❌ Something went wrong.",
+                show_alert=True
+            )
+        except Exception:
+            pass
+
+
+# ============================================================
+# FONT STYLE CALLBACK
+# Powered by ProviderBotz
+# ============================================================
+
+@Client.on_callback_query(filters.regex(r"^style\+"))
+async def style(client, callback_query):
+
+    try:
+
+        await callback_query.answer()
+
+        # style+typewriter
+        _, style_name = callback_query.data.split("+", 1)
+
+        # Find selected font
+        cls = FONT_STYLES.get(style_name)
+
+        if cls is None:
+
+            await callback_query.answer(
+                "❌ Invalid font style.",
+                show_alert=True
+            )
+
+            return
+
+        # ----------------------------------------------------
+        # Get original text
+        # Powered by ProviderBotz
+        # ----------------------------------------------------
+
+        if (
+            callback_query.message.reply_to_message
+            and callback_query.message.reply_to_message.text
+        ):
+
+            try:
+
+                old_text = (
+                    callback_query
+                    .message
+                    .reply_to_message
+                    .text
+                    .split(None, 1)[1]
+                )
+
+            except IndexError:
+
+                old_text = callback_query.message.text
+
+        else:
+
+            old_text = callback_query.message.text
+
+        # ----------------------------------------------------
+        # Generate font
+        # ----------------------------------------------------
+
+        new_text = cls(old_text)
+
+        # ----------------------------------------------------
+        # Keep existing buttons
+        # ----------------------------------------------------
+
+        await callback_query.message.edit_text(
+            f"<code>{new_text}</code>\n\n"
+            "👆 <b>Click To Copy</b>\n\n"
+            "<i>Powered by ProviderBotz</i>",
+            reply_markup=callback_query.message.reply_markup
+        )
+
+    except Exception as e:
+
+        logger.exception(
+            "Font style error: %s",
+            e
+        )
+
+        try:
+
+            await callback_query.answer(
+                "❌ Unable to generate this font.",
+                show_alert=True
+            )
+
+        except Exception:
+            pass
+
+
+# ============================================================
+# CLOSE BUTTON
+# Powered by ProviderBotz
+# ============================================================
+
+@Client.on_callback_query(filters.regex(r"^font_close$"))
+async def close_font(client, callback_query):
+
+    try:
+
+        await callback_query.answer()
+
+        await callback_query.message.delete()
+
+    except Exception as e:
+
+        logger.exception(
+            "Font close error: %s",
+            e
+        )
+
+        try:
+
+            await callback_query.answer(
+                "❌ Unable to close.",
+                show_alert=True
+            )
+
+        except Exception:
+            pass

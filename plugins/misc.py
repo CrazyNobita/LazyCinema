@@ -1,15 +1,14 @@
+import logging
 import os
 from pyrogram import Client, filters, enums
-from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant, MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
-from utils import extract_user, get_file_id, get_poster
+from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant
+from utils import extract_user, get_file_id
 from datetime import datetime
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
-import logging
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from database.ia_filterdb import dreamxbotz_get_movies, dreamxbotz_get_series
 from pyrogram.enums import ParseMode
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.ERROR)
 
 @Client.on_message(filters.command('id'))
 async def showid(client, message):
@@ -21,8 +20,7 @@ async def showid(client, message):
         username = message.from_user.username
         dc_id = message.from_user.dc_id or ""
         await message.reply_text(
-            f"<b>➲ First Name:</b> {first}\n<b>➲ Last Name:</b> {last}\n<b>➲ Username:</b> {username}\n<b>➲ Telegram ID:</b> <code>{user_id}</code>\n<b>➲ Data Centre:</b> <code>{dc_id}</code>",
-            quote=True
+            f"<b>➲ First Name:</b> {first}\n<b>➲ Last Name:</b> {last}\n<b>➲ Username:</b> {username}\n<b>➲ Telegram ID:</b> <code>{user_id}</code>\n<b>➲ Data Centre:</b> <code>{dc_id}</code>"
         )
     elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         _id = ""
@@ -50,8 +48,7 @@ async def showid(client, message):
                 f"<code>{file_info.file_id}</code>\n"
             )
         await message.reply_text(
-            _id,
-            quote=True
+            _id
         )
 
 @Client.on_message(filters.command(["info"]))
@@ -97,6 +94,62 @@ async def who_is(client, message):
     chat_photo = from_user.photo
     if chat_photo:
         local_user_photo = await client.download_media(
+            message=chat_photo.big_file_id
+        )
+        buttons = [[
+            InlineKeyboardButton('🔐 Close', callback_data='close_data', style=enums.ButtonStyle.DANGER)
+        ]]
+        reply_markup = InlineKeyboardMarkup(buttons)
+        await message.reply_photo(
+            photo=local_user_photo,
+            reply_markup=reply_markup,
+            caption=message_out_str,
+            parse_mode=enums.ParseMode.HTML,
+            disable_notification=True
+        )
+        os.remove(local_user_photo)
+    else:
+        buttons = [[
+            InlineKeyboardButton('🔐 Close', callback_data='close_data', style=enums.ButtonStyle.DANGER)
+        ]]
+        reply_markup = InlineKeyboardMarkup(buttons)
+        await message.reply_text(
+            text=message_out_str,
+            reply_markup=reply_markup,
+            parse_mode=enums.ParseMode.HTML,
+            disable_notification=True
+        )
+    await status_message.delete()
+
+@Client.on_message(filters.private & filters.command("movies"))
+async def dreamxbotz_list_movies(client, message):
+    try:
+        movies = await dreamxbotz_get_movies()
+        if not movies:
+            return await message.reply("❌ No Recent Movies Found", parse_mode=ParseMode.HTML)       
+        msg = "<b>Latest Uploads List ✅</b>\n\n"
+        msg += "<b>🎬 Movies:</b>\n\n"
+        msg += "\n".join(f"<b>{i+1}. {m}</b>" for i, m in enumerate(movies))
+        await message.reply(msg[:4096], parse_mode=ParseMode.HTML)
+    except Exception as e:
+        logger.error(f"Error in dreamxbotz_list_movies: {e}")
+        await message.reply("An Error Occurred ☹️", parse_mode=ParseMode.HTML)
+
+@Client.on_message(filters.private & filters.command("series"))
+async def dreamxbotz_list_series(client, message):
+    try:
+        series_data = await dreamxbotz_get_series()
+        if not series_data:
+            return await message.reply("❌ No Recent Series Found", parse_mode=ParseMode.HTML)       
+        msg = "<b>Latest Uploads List ✅</b>\n\n"
+        msg += "<b>📺 Series:</b>\n"
+        for i, (title, seasons) in enumerate(series_data.items(), 1):
+            season_list = ", ".join(f"{s}" for s in seasons)
+            msg += f"<b>{i}. {title} - Season {season_list}</b>\n"
+        await message.reply(msg[:4096], parse_mode=ParseMode.HTML)
+    except Exception as e:
+        logger.error(f"Error in dreamxbotz_list_series: {e}")
+        await message.reply("An Error Occurred ☹️", parse_mode=ParseMode.HTML)        local_user_photo = await client.download_media(
             message=chat_photo.big_file_id
         )
         buttons = [[

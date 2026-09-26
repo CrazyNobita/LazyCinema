@@ -1142,8 +1142,11 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.answer(MSG_ALRT)
             await asyncio.sleep(1)
             await log_msg.reply_text(
-                text=f"•• ʟɪɴᴋ ɢᴇɴᴇʀᴀᴛᴇᴅ ꜰᴏʀ ɪᴅ #{user_id} \n•• ᴜꜱᴇʀɴᴀᴍᴇ : {username} \n\n•• ᖴᎥᒪᗴ Nᗩᗰᗴ : {fileName}",
-                quote=True,
+                text=(
+                f"•• ʟɪɴᴋ ɢᴇɴᴇʀᴀᴛᴇᴅ ꜰᴏʀ ɪᴅ #{user_id}\n"
+                f"•• ᴜꜱᴇʀɴᴀᴍᴇ : {username}\n\n"
+                f"•• ᖴᎥᒪᗴ Nᗩᗰᗴ : {fileName}"
+            ),
                 reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🚀 ꜰᴀꜱᴛ ᴅᴏᴡɴʟᴏᴀᴅ ", url=dreamx_download),  # we download Link
                                                     InlineKeyboardButton(' ᴡᴀᴛᴄʜ ᴏɴʟɪɴᴇ 🖥️', url=dreamx_stream)]])  # web stream Link
             )

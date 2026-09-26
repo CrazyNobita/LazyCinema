@@ -15,6 +15,7 @@ from pyrogram import Client
 import asyncio
 from pyrogram.types import LinkPreviewOptions, Message
 from pyrogram import StopPropagation
+from pyrogram.types import ReplyParameters, LinkPreviewOptions
 
 pyro_log = logging.getLogger("pyrogram")
 pyro_log.setLevel(logging.WARNING)
@@ -597,3 +598,55 @@ async def custom_listen(self, chat_id, filters=None, timeout=60, user_id=None):
         raise
 
 Client.listen = custom_listen
+
+async def custom_reply_text(
+    self: "types.Message",
+    text: str,
+    quote: bool = None,
+    parse_mode=None,
+    entities=None,
+    disable_web_page_preview: bool = None,
+    link_preview_options=None,
+    disable_notification: bool = None,
+    message_thread_id: int = None,
+    reply_to_message_id: int = None,
+    reply_to_story_id: int = None,
+    reply_to_chat_id=None,
+    schedule_date=None,
+    protect_content: bool = None,
+    reply_markup=None,
+    **kwargs
+):
+    if quote is None:
+        quote = self.chat.type != enums.ChatType.PRIVATE
+    if reply_to_message_id is None and reply_to_story_id is None and quote:
+        reply_to_message_id = self.id
+
+    if link_preview_options is None and disable_web_page_preview is not None:
+        link_preview_options = LinkPreviewOptions(is_disabled=disable_web_page_preview)
+
+    reply_parameters = None
+    if reply_to_message_id or reply_to_story_id:
+        reply_parameters = ReplyParameters(
+            message_id=reply_to_message_id,
+            story_id=reply_to_story_id,
+            chat_id=reply_to_chat_id,
+        )
+
+    return await self._client.send_message(
+        chat_id=self.chat.id,
+        text=text,
+        parse_mode=parse_mode,
+        entities=entities,
+        link_preview_options=link_preview_options,
+        disable_notification=disable_notification,
+        message_thread_id=message_thread_id,
+        reply_parameters=reply_parameters,
+        schedule_date=schedule_date,
+        protect_content=protect_content,
+        reply_markup=reply_markup,
+        **kwargs
+    )
+
+Message.reply_text = custom_reply_text
+Message.reply = custom_reply_text

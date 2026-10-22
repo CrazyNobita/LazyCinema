@@ -57,7 +57,7 @@ class Media(Document):
     cover = fields.StrField(allow_none=True)
 
     class Meta:
-        indexes = ("$file_name", "file_unique_id")
+        indexes = ("$file_name",)
         collection_name = COLLECTION_NAME
 
 
@@ -75,7 +75,7 @@ class Media2(Document):
 
 
     class Meta:
-        indexes = ("$file_name", "file_unique_id")
+        indexes = ("$file_name",)
         collection_name = COLLECTION_NAME
 
 
@@ -293,7 +293,6 @@ async def get_bad_files(query, file_type=None):
     return files, len(files)
 
 _FILE_DETAILS_CACHE = LimitedDict(maxsize=300)
-
 
 async def get_file_details(query):
     if not query:

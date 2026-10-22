@@ -1,10 +1,11 @@
-from pyrogram import enums
+# ADDED BUTTONS URL TO FIXED
 
+from pyrogram import enums
 import logging
 import pytz
 import datetime
 from Script import script
-from info import ADMINS, PREMIUM_LOGS, STAR_PREMIUM_PLANS, SUBSCRIPTION
+from info import ADMINS, PREMIUM_LOGS, STAR_PREMIUM_PLANS, SUBSCRIPTION, TZ
 from utils import get_seconds, temp
 from database.users_chats_db import db
 import asyncio
@@ -50,14 +51,12 @@ async def myplan(client, message):
 
         if data and data.get("expiry_time"):
             expiry = data.get("expiry_time")
-            expiry_ist = expiry.astimezone(pytz.timezone("Asia/Kolkata"))
+            expiry_ist = expiry.astimezone(TZ)
             expiry_str_in_ist = expiry_ist.strftime(
                 "%d-%m-%Y\n⏱️ ᴇxᴘɪʀʏ ᴛɪᴍᴇ : %I:%M:%S %p"
             )
 
-            current_time = datetime.datetime.now(
-                pytz.timezone("Asia/Kolkata")
-            )
+            current_time = datetime.datetime.now(TZ)
             time_left = expiry_ist - current_time
             days = time_left.days
 
@@ -119,14 +118,9 @@ async def get_premium(client, message):
 
         if data and data.get("expiry_time"):
             expiry = data.get("expiry_time")
-            expiry_ist = expiry.astimezone(pytz.timezone("Asia/Kolkata"))
-            expiry_str_in_ist = expiry.astimezone(
-                pytz.timezone("Asia/Kolkata")
-            ).strftime("%d-%m-%Y\n⏱️ ᴇxᴘɪʀʏ ᴛɪᴍᴇ : %I:%M:%S %p")
-
-            current_time = datetime.datetime.now(
-                pytz.timezone("Asia/Kolkata")
-            )
+            expiry_ist = expiry.astimezone(TZ)
+            expiry_str_in_ist = expiry_ist.strftime("%d-%m-%Y\n⏱️ ᴇxᴘɪʀʏ ᴛɪᴍᴇ : %I:%M:%S %p")            
+            current_time = datetime.datetime.now(TZ)
             time_left = expiry_ist - current_time
             days = time_left.days
 
@@ -155,7 +149,7 @@ async def get_premium(client, message):
 @Client.on_message(filters.command("add_premium") & filters.user(ADMINS))
 async def give_premium_cmd_handler(client, message):
     if len(message.command) == 4:
-        time_zone = datetime.datetime.now(pytz.timezone("Asia/Kolkata"))
+        time_zone = datetime.datetime.now(TZ)
         current_time = time_zone.strftime(
             "%d-%m-%Y\n⏱️ ᴊᴏɪɴɪɴɢ ᴛɪᴍᴇ : %I:%M:%S %p"
         )
@@ -173,9 +167,7 @@ async def give_premium_cmd_handler(client, message):
 
             data = await db.get_user(user_id)
             expiry = data.get("expiry_time")
-            expiry_str_in_ist = expiry.astimezone(
-                pytz.timezone("Asia/Kolkata")
-            ).strftime("%d-%m-%Y\n⏱️ ᴇxᴘɪʀʏ ᴛɪᴍᴇ : %I:%M:%S %p")
+            expiry_str_in_ist = expiry.astimezone(TZ).strftime("%d-%m-%Y\n⏱️ ᴇxᴘɪʀʏ ᴛɪᴍᴇ : %I:%M:%S %p")
 
             await message.reply_text(
                 f"ᴘʀᴇᴍɪᴜᴍ ᴀᴅᴅᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ✅\n\n"
@@ -241,13 +233,11 @@ async def premium_user(client, message):
         if not expiry:
             continue
 
-        expiry_ist = expiry.astimezone(pytz.timezone("Asia/Kolkata"))
+        expiry_ist = expiry.astimezone(TZ)
         expiry_str_in_ist = expiry_ist.strftime(
             "%d-%m-%Y\n⏱️ ᴇxᴘɪʀʏ ᴛɪᴍᴇ : %I:%M:%S %p"
         )
-        current_time = datetime.datetime.now(
-            pytz.timezone("Asia/Kolkata")
-        )
+       current_time = datetime.datetime.now(TZ)
         time_left = expiry_ist - current_time
         days = time_left.days
 
@@ -332,7 +322,7 @@ async def plan(client, message):
 
 
 # Telegram Star Payment Method 👇
-# Credit - @BeingXAnonymous
+# Credit - @LazyBhaskar
 
 @Client.on_callback_query(filters.regex(r"buy_\d+"))
 async def premium_button(client, callback_query: CallbackQuery):
@@ -417,9 +407,7 @@ async def successful_premium_payment(client, message):
         amount = int(message.successful_payment.total_amount)
         user_id = message.from_user.id
 
-        time_zone = datetime.datetime.now(
-            pytz.timezone("Asia/Kolkata")
-        )
+        time_zone = datetime.datetime.now(TZ)
         current_time = time_zone.strftime("%d-%m-%Y | %I:%M:%S %p")
 
         if amount in STAR_PREMIUM_PLANS:
@@ -439,9 +427,7 @@ async def successful_premium_payment(client, message):
 
                 data = await db.get_user(user_id)
                 expiry = data.get("expiry_time")
-                expiry_str_in_ist = expiry.astimezone(
-                    pytz.timezone("Asia/Kolkata")
-                ).strftime("%d-%m-%Y | %I:%M:%S %p")
+                expiry_str_in_ist = expiry.astimezone(TZ).strftime("%d-%m-%Y | %I:%M:%S %p")
 
                 await message.reply(
                     text=(

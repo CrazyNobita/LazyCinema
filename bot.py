@@ -1,4 +1,4 @@
-import plugins.listener  # noqa: F401
+import plugins.listener
 import logging
 import logging.config
 from pyrogram import idle, __version__

@@ -237,7 +237,7 @@ async def premium_user(client, message):
         expiry_str_in_ist = expiry_ist.strftime(
             "%d-%m-%Y\n⏱️ ᴇxᴘɪʀʏ ᴛɪᴍᴇ : %I:%M:%S %p"
         )
-       current_time = datetime.datetime.now(TZ)
+        current_time = datetime.datetime.now(TZ)
         time_left = expiry_ist - current_time
         days = time_left.days
 

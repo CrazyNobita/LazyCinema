@@ -156,44 +156,37 @@ async def start(client, message):
             )
             return
 
-        if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
-            buttons = [[
-                    InlineKeyboardButton('✧ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ✧', url=f'http://telegram.me/{temp.U_NAME}?startgroup=true', style=enums.ButtonStyle.SUCCESS)
-                ],[
-                    InlineKeyboardButton(' ✨ ᴛᴏᴘ sᴇᴀʀᴄʜɪɴɢ  ', callback_data='topsearch', style=enums.ButtonStyle.PRIMARY),
-                    InlineKeyboardButton(' ᴀʙᴏᴜᴛ 📖', callback_data='about', style=enums.ButtonStyle.DANGER)
-                ],[
-                    InlineKeyboardButton('⛑️ ʜᴇʟᴩ ', callback_data="help", style=enums.ButtonStyle.DANGER),
-                     InlineKeyboardButton('ᴜᴘɢʀᴀᴅᴇ 🎟', callback_data="premium_info", style=enums.ButtonStyle.PRIMARY),
-                ]]
-            reply_markup = InlineKeyboardMarkup(buttons)
-            current_time = datetime.now(pytz.timezone(TIMEZONE))
-            curr_time = current_time.hour        
-            if curr_time < 12:
-                gtxt = "ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ 🌞" 
-            elif curr_time < 17:
-                gtxt = "ɢᴏᴏᴅ ᴀғᴛᴇʀɴᴏᴏɴ 🌓" 
-            elif curr_time < 21:
-                gtxt = "ɢᴏᴏᴅ ᴇᴠᴇɴɪɴɢ 🌘"
-            else:
-                gtxt = "ɢᴏᴏᴅ ɴɪɢʜᴛ 🌑"
-            try:
+        try:
                 PIC = f"{random.choice(PICS_URL)}?r={get_random_mix_id()}"
             except Exception:
                 PIC = random.choice(PICS)
-            await message.reply_photo(
-                photo=PIC,
-                caption=script.START_TXT.format(message.from_user.mention, gtxt, temp.U_NAME, temp.B_NAME),
-                reply_markup=reply_markup,
-                parse_mode=enums.ParseMode.HTML
-            )
-            except Exception:
-                await message.reply_text(
-                    text=script.START_TXT.format(message.from_user.mention, gtxt, temp.U_NAME, temp.B_NAME),
+
+            try:
+                await message.reply_photo(
+                    photo=PIC,
+                    caption=script.START_TXT.format(
+                        message.from_user.mention,
+                        gtxt,
+                        temp.U_NAME,
+                        temp.B_NAME
+                    ),
                     reply_markup=reply_markup,
                     parse_mode=enums.ParseMode.HTML
                 )
+            except Exception:
+                await message.reply_text(
+                    text=script.START_TXT.format(
+                        message.from_user.mention,
+                        gtxt,
+                        temp.U_NAME,
+                        temp.B_NAME
+                    ),
+                    reply_markup=reply_markup,
+                    parse_mode=enums.ParseMode.HTML
+                )
+
             return
+
         if message.command[1].startswith("reff_"):
             try:
                 user_id = int(message.command[1].split("_")[1])

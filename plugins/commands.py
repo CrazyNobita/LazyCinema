@@ -144,19 +144,8 @@ async def start(client, message):
                 gtxt = "ɢᴏᴏᴅ ᴇᴠᴇɴɪɴɢ 🌘"
             else:
                 gtxt = "ɢᴏᴏᴅ ɴɪɢʜᴛ 🌑"
-            try:      
-                PIC = f"{random.choice(PICS_URL)}?r={get_random_mix_id()}"
-            except Exception:
-                PIC = random.choice(PICS)
-            await message.reply_photo(
-                photo=PIC,
-                caption=script.START_TXT.format(message.from_user.mention, gtxt, temp.U_NAME, temp.B_NAME),
-                reply_markup=reply_markup,
-                parse_mode=enums.ParseMode.HTML
-            )
-            return
 
-        try:
+            try:
                 PIC = f"{random.choice(PICS_URL)}?r={get_random_mix_id()}"
             except Exception:
                 PIC = random.choice(PICS)
@@ -193,34 +182,54 @@ async def start(client, message):
             except ValueError:
                 await message.reply_text("<b>‼️ ɪɴᴠᴀʟɪᴅ ʀᴇꜰᴇʀ!</b>")
                 return
+
             if user_id == message.from_user.id:
                 await message.reply_text(script.REFER_SELF_ALRT)
                 return
+
             if referdb.is_user_in_list(message.from_user.id):
                 await message.reply_text(script.REFER_ALREADY_ALRT)
                 return
-            if await db.is_user_exist(message.from_user.id): 
+
+            if await db.is_user_exist(message.from_user.id):
                 await message.reply_text(script.REFER_ALREADY_JOINED_ALRT)
-                return 
+                return
+
             try:
                 uss = await client.get_users(user_id)
             except Exception:
-                return 	    
+                return
+
             referdb.add_user(message.from_user.id)
             fromuse = referdb.get_refer_points(user_id) + 10
+
             if fromuse == 100:
-                referdb.add_refer_points(user_id, 0) 
-                await message.reply_text(script.REFER_INVITED_ALRT.format(uss.mention))		    
-                await client.send_message(chat_id=user_id, text=script.REFER_CONGRATS_ALRT.format(message.from_user.mention)) 	
+                referdb.add_refer_points(user_id, 0)
+                await message.reply_text(
+                    script.REFER_INVITED_ALRT.format(uss.mention)
+                )
+                await client.send_message(
+                    chat_id=user_id,
+                    text=script.REFER_CONGRATS_ALRT.format(
+                        message.from_user.mention
+                    )
+                )
+
                 seconds = 2592000
                 if seconds > 0:
                     expiry_time = datetime.now() + timedelta(seconds=seconds)
-                    user_data = {"id": user_id, "expiry_time": expiry_time}  # Using "id" instead of "user_id"  
-                    await db.update_user(user_data)  # Use the update_user method to update or insert user data		    
+                    user_data = {
+                        "id": user_id,
+                        "expiry_time": expiry_time
+                    }
+                    await db.update_user(user_data)
+
                     await client.send_message(
                         chat_id=user_id,
                         text=f"<b>Hᴇʏ {uss.mention}\n\nYᴏᴜ ɢᴏᴛ 1 ᴍᴏɴᴛʜ ᴘʀᴇᴍɪᴜᴍ sᴜʙsᴄʀɪᴘᴛɪᴏɴ ʙʏ ɪɴᴠɪᴛɪɴɢ 10 ᴜsᴇʀs ❗</b>",
-                        link_preview_options=LinkPreviewOptions(is_disabled=True)              
+                        link_preview_options=LinkPreviewOptions(
+                            is_disabled=True
+                        )
                     )
                 for admin in ADMINS:
                     await client.send_message(chat_id=admin, text=f"Sᴜᴄᴄᴇss ғᴜʟʟʏ ᴛᴀsᴋ ᴄᴏᴍᴘʟᴇᴛᴇᴅ ʙʏ ᴛʜɪs ᴜsᴇʀ:\n\nuser Nᴀᴍᴇ: {uss.mention}\n\nUsᴇʀ ɪᴅ: {uss.id}!")	

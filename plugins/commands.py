@@ -135,7 +135,7 @@ async def start(client, message):
                      InlineKeyboardButton('ᴜᴘɢʀᴀᴅᴇ 🎟', callback_data="premium_info", style=enums.ButtonStyle.PRIMARY),
                 ]]
             reply_markup = InlineKeyboardMarkup(buttons)
-            current_time = datetime.now(pytz.timezone(TIMEZONE))
+            current_time = datetime.now(TZ)
             curr_time = current_time.hour        
             if curr_time < 12:
                 gtxt = "ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ 🌞" 

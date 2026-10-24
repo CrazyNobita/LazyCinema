@@ -1732,18 +1732,18 @@ async def auto_filter(client, msg, spoll=False):
                         return result
                     else:
                         try:
-                            if m:
-                                await m.delete()
+                            await m.edit(script.MVE_NT_FND)
+                            if settings.get('auto_delete'):
+                                asyncio.create_task(_schedule_delete(m, message, DELETE_TIME))
                         except Exception:
                             pass
-                        result = await advantage_spell_chok(client, message)
-                        return result
+                        return
             else:
                 return
         else:
             message = msg.message.reply_to_message
             search, files, offset, total_results = spoll
-            m = await message.reply_text(f'🔎 sᴇᴀʀᴄʜɪɴɢ {search}')
+            m = await message.reply_sticker('CAACAgUAAxkBAAESF-Vq3K6bx0ZhrvtMEsdpxetVBAABk0cAAl8eAAI6StlWCl14oh7roMg9BA')
             settings = await get_settings(message.chat.id)
             await msg.message.delete()
         key = f"{message.chat.id}-{message.id}"

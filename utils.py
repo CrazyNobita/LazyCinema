@@ -97,7 +97,7 @@ async def is_req_subscribed(client, user_id, rqfsub_channels):
                 invite_link = invite.invite_link
                 temp.REQ_LINKS[ch_id] = invite_link
 
-            return [InlineKeyboardButton(f"⛔️ Join {chat.title}", url=invite_link)]
+            return [InlineKeyboardButton(f"⛔️ Join {chat.title}", url=invite_link, style=enums.ButtonStyle.PRIMARY)]
         except ChatAdminRequired:
             logger.warning(f"Bot not admin in {ch_id}")
         except Exception as e:
@@ -124,7 +124,7 @@ async def is_subscribed(client, user_id, fsub_channels):
             try:
                 chat = await client.get_chat(int(channel_id))
                 invite_link = await client.create_chat_invite_link(channel_id)
-                return InlineKeyboardButton(f"📢 Join {chat.title}", url=invite_link.invite_link)
+                return InlineKeyboardButton(f"📢 Join {chat.title}", url=invite_link.invite_link, style=enums.ButtonStyle.SUCCESS)
             except Exception as e:
                 logger.warning(f"Failed to create invite for {channel_id}: {e}")
         except Exception as e:
